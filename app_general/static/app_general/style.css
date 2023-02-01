@@ -1,0 +1,152 @@
+
+/*----------------------------------------------------------------------------- 
+01=BASE   
+-----------------------------------------------------------------------------*/
+
+/* Box Model Hack */
+* {
+     -moz-box-sizing: border-box; /* Firexfox */
+     -webkit-box-sizing: border-box; /* Safari/Chrome/iOS/Android */
+     box-sizing: border-box; /* IE */
+}
+
+h1{
+     margin: 0px;
+     display: inline-block;  
+}
+
+body {
+     background: url('../images/notebook.png'); /* add a fallback color of #d6d6d6 */
+     color: #000000;
+     font-family: 'Lato', sans-serif;
+     line-height: 1.7; /* line-height is unit-less */
+     font-size: 100%;
+     margin: 0px;
+}  
+
+.clear {
+	clear: both;
+}
+
+ b, strong {
+     font-weight: bold;
+ }
+ /* Add a black background color to the top navigation */
+.topnav {
+     background-color: rgb(17, 145, 188);
+     overflow: hidden;
+ }
+ 
+ /* Style the links inside the navigation bar */
+ .topnav a {
+   float: left;
+   color: #f2f2f2;
+   text-align: center;
+   vertical-align: middle;  
+   padding: 14px 16px;
+   text-decoration: none;
+   font-size: 17px;
+ }
+ 
+ /* Change the color of links on hover */
+ .topnav a:hover {
+   background-color: rgb(116, 201, 210);
+   color: black;
+ }
+ 
+ /* Add a color to the active/current link */
+ .topnav a.active {
+   background-color: #579BB1;
+   color: white;
+ }
+
+ .topnav a.home {
+     background-color: #579BB1;
+     color: white;
+   }
+
+.topnav a.login {
+     background-color: rgb(59, 59, 59);
+     color: white;
+}
+ 
+ /* Right-aligned section inside the top navigation */
+ .topnav-right {
+   float: right;
+ }
+
+ /*ul {
+     list-style-type: none;
+     margin: 0;
+     padding: 0;
+     overflow: hidden;
+     background-color: rgb(17, 145, 188);
+     position: sticky;
+     top: 0;
+   }
+   
+   li {
+     float: left;
+   }
+   
+   li a {
+     display: block;
+     color: white;
+     text-align: center;
+     padding: 14px 16px;
+     text-decoration: none;
+   }*/
+   
+   /* Change the link color to #111 (black) on hover */
+   li a:hover {
+     background-color: rgb(116, 201, 210);
+   }
+
+/*----------------------------------------------------------------------------- 
+02=LAYOUT  
+-----------------------------------------------------------------------------*/
+#home h1{
+     vertical-align: middle;   
+}
+
+#home img{
+     vertical-align: middle; 
+}
+
+#container {
+     width: 1500px;
+     margin: 0 auto 0 auto;
+}
+
+#header {
+     margin: 0px;
+}
+
+#main {
+     background: white;
+     padding: 100px;
+     width: 1200px;
+     float: center;
+     margin: auto;
+}
+
+#sidebar {
+     background: white;
+     border: lightgray;
+     width: 300px;
+     height: 800px;
+     float: left;
+     padding: 50px;
+}
+
+#footer {
+     background: lightblue;
+     width: 700px;
+     padding: 5px;
+}
+
+/*----------------------------------------------------------------------------- 
+03=MAIN  
+-----------------------------------------------------------------------------*/
+
+
