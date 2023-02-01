@@ -1,0 +1,240 @@
+/*----------------------------------------------------------------------------- 
+01=BASE   
+-----------------------------------------------------------------------------*/
+
+/* roboto-mono-regular - latin */
+@font-face {
+     font-family: 'Roboto Mono';
+     font-style: normal;
+     font-weight: 400;
+     src: local(''),
+          url('fonts/roboto-mono-v21-latin-regular.woff2') format('woff2'),
+          /* Chrome 26+, Opera 23+, Firefox 39+ */
+          url('fonts/roboto-mono-v21-latin-regular.woff') format('woff');
+     /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* roboto-mono-700 - latin */
+@font-face {
+     font-family: 'Roboto Mono';
+     font-style: normal;
+     font-weight: 700;
+     src: local(''),
+          url('fonts/roboto-mono-v21-latin-700.woff2') format('woff2'),
+          /* Chrome 26+, Opera 23+, Firefox 39+ */
+          url('fonts/roboto-mono-v21-latin-700.woff') format('woff');
+     /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+html {
+     font-family: 'Roboto Mono', sans-serif;
+     color: #333333;
+     font-weight: 400;
+}
+
+.site {
+     display: flex;
+     min-height: 100vh;
+     flex-direction: column;
+}
+
+/* Box Model Hack */
+* {
+     -moz-box-sizing: border-box;
+     /* Firexfox */
+     -webkit-box-sizing: border-box;
+     /* Safari/Chrome/iOS/Android */
+     box-sizing: border-box;
+     /* IE */
+}
+
+h1 {
+     margin: 0px;
+     display: inline-block;
+}
+
+body {
+     background: url('images/notebook.png');
+     /* add a fallback color of #d6d6d6 */
+     color: #000000;
+     font-family: 'Lato', sans-serif;
+     line-height: 1.7;
+     /* line-height is unit-less */
+     font-size: 100%;
+     margin: 0px;
+}
+
+.clear {
+     clear: both;
+}
+
+b,
+strong {
+     font-weight: bold;
+}
+
+/* Site header */
+.siteHeader {
+     background-color: rgb(17, 145, 188);
+     box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.1);
+     overflow: hidden;
+     display: flex;
+     justify-content: flex-start;
+     height: 64px;
+     position: fixed; /* Set the navbar to fixed position */
+     top: 0; /* Position the navbar at the top of the page */
+     width: 100%; /* Full width */
+ }
+ 
+ .siteHeader a {
+     color: #111111;
+     background-color: rgba(0, 0, 0, 0);
+     font-size: 18px;
+     font-weight: 700;
+     display: flex;
+     align-items: center;
+     padding: 14px 16px;
+     margin-left: 16px;
+     text-decoration: none;
+     transition: background-color 300ms;
+ }
+ 
+ .siteHeader a:hover {
+     background-color: dodgerblue;
+ }
+
+ .siteHeader a:active {
+     background-color: #579BB1;
+     color: white;
+ }
+
+ .siteHeader a.login {
+     margin-left: auto;
+     background-color: #333333;
+     color: #579BB1;
+ }
+ 
+ /* Site Footer */
+ .siteFooter {
+     background-color: rgb(17, 145, 188);
+     text-align: center;
+     padding: 8px;
+     width: 100%;
+ }
+ 
+ .siteFooter a {
+     color: aquamarine;
+     text-decoration: none;
+     padding: 14px 16px;
+ }
+ 
+ .siteFooter p.copyright {
+     font-size: 14px;
+ }
+
+/* Home */
+.homeLanding {
+     margin-top: 64px;
+     background-color: whitesmoke;
+     min-height: 70vh;
+     max-height: 90vh;
+     max-width: 100vw;
+     padding: 50px 10vw;
+     flex-grow: 1;
+}
+
+.homeLandingHeader {
+     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+     margin-top: 0px;
+     margin-bottom: 24px;
+}
+
+.homeLandingText {
+     color: whitesmoke;
+     font-size: 24px;
+     font-weight: 700;
+}
+
+.homeLandingImage {
+     width: 100%;
+     height: 100%;
+     max-width: 80vw;
+     min-height: 50vh;
+     max-height: 70vh;
+     object-fit: cover;
+     object-position: center;
+}
+
+/*ul {
+     list-style-type: none;
+     margin: 0;
+     padding: 0;
+     overflow: hidden;
+     background-color: rgb(17, 145, 188);
+     position: sticky;
+     top: 0;
+   }
+   
+   li {
+     float: left;
+   }
+   
+   li a {
+     display: block;
+     color: white;
+     text-align: center;
+     padding: 14px 16px;
+     text-decoration: none;
+   }*/
+
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+     background-color: rgb(116, 201, 210);
+}
+
+/*----------------------------------------------------------------------------- 
+02=LAYOUT  
+-----------------------------------------------------------------------------*/
+#home h1 {
+     vertical-align: middle;
+}
+
+#home img {
+     vertical-align: middle;
+}
+
+#container {
+     width: 1500px;
+     margin: 0 auto 0 auto;
+}
+
+#header {
+     margin: 0px;
+}
+
+#main {
+     background: white;
+     padding: 100px;
+     width: 1200px;
+     float: center;
+     margin: auto;
+}
+
+#sidebar {
+     background: white;
+     border: lightgray;
+     width: 300px;
+     height: 800px;
+     float: left;
+     padding: 50px;
+}
+
+#footer {
+     background: lightblue;
+     width: 700px;
+     padding: 5px;
+}
+
+/*----------------------------------------------------------------------------- 
+03=MAIN  
+-----------------------------------------------------------------------------*/
