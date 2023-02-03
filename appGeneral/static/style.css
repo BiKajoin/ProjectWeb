@@ -2,30 +2,6 @@
 01=BASE   
 -----------------------------------------------------------------------------*/
 
-/* roboto-mono-regular - latin */
-@font-face {
-     font-family: 'Roboto Mono';
-     font-style: normal;
-     font-weight: 400;
-     src: local(''),
-          url('fonts/roboto-mono-v21-latin-regular.woff2') format('woff2'),
-          /* Chrome 26+, Opera 23+, Firefox 39+ */
-          url('fonts/roboto-mono-v21-latin-regular.woff') format('woff');
-     /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
-}
-
-/* roboto-mono-700 - latin */
-@font-face {
-     font-family: 'Roboto Mono';
-     font-style: normal;
-     font-weight: 700;
-     src: local(''),
-          url('fonts/roboto-mono-v21-latin-700.woff2') format('woff2'),
-          /* Chrome 26+, Opera 23+, Firefox 39+ */
-          url('fonts/roboto-mono-v21-latin-700.woff') format('woff');
-     /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
-}
-
 html {
      font-family: 'Roboto Mono', sans-serif;
      color: #333333;
@@ -48,10 +24,37 @@ html {
      /* IE */
 }
 
-h1 {
-     margin: 0px;
-     display: inline-block;
-}
+h1, h2, h3, h4, h5, h6 {
+     color: rgb(17, 145, 188);
+     font-weight: 700;
+     line-height: 1.4;
+     margin-top: 0px;
+     margin-bottom: 16px;
+ }
+ 
+ h1 {
+     font-size: 64px;
+ }
+ 
+ h2 {
+     font-size: 48px;
+ }
+ 
+ h3 {
+     font-size: 32px;
+ }
+ 
+ h4 {
+     font-size: 28px;
+ }
+ 
+ h5 {
+     font-size: 24px;
+ }
+ 
+ h6 {
+     font-size: 20px;
+ }
 
 body {
      background: url('images/notebook.png');
@@ -94,7 +97,7 @@ strong {
      display: flex;
      align-items: center;
      padding: 14px 16px;
-     margin-left: 16px;
+     /* margin-left: 16px; */
      text-decoration: none;
      transition: background-color 300ms;
  }
@@ -163,6 +166,17 @@ strong {
      max-height: 70vh;
      object-fit: cover;
      object-position: center;
+}
+
+/* Content */
+.contentSection {
+     margin-top: 64px;
+     background-color: whitesmoke;
+     min-height: 70vh;
+     max-height: 90vh;
+     max-width: 100vw;
+     padding: 50px 10vw;
+     flex-grow: 1;
 }
 
 /*ul {
