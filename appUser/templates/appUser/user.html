@@ -1,0 +1,14 @@
+{% extends 'appGeneral/components/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class = "contentUserSection">
+    <h1>User Management</h1>
+    <div class="buttonWrapper">
+        <button type="button" class="btn btn-primary btn-lg">Edit</button>
+        <button type="button" class="btn btn-primary btn-lg">Add</button>
+        <button type="button" class="btn btn-danger btn-lg">Remove</button>
+    </div>
+    <img class = "homeLandingImage" src = "{% static 'images/notebook.png' %}" alt = "Mockup picture">
+</section>
+{% endblock %}
