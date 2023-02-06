@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     
     'appGeneral.apps.AppGeneralConfig',
     'appModel.apps.AppModelConfig',
+    'appData.apps.AppDataConfig'
 ]
 
 MIDDLEWARE = [
@@ -120,6 +121,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = 'static/'
+
+STATICFILES_DIRS = [
+    "appGeneral/static",
+    'appModel/static/',
+    'appData/static/'
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

@@ -1,9 +1,9 @@
 <div id="header">
     <div class="siteHeader">
         <a href="{% url 'home' %}">Nowcasting<i class="fa fa-fw fa-sun-o"></i></a>
-        <a href = "index.html">Data</a>
+        <a href = "{% url 'data' %}">Data</a>
         <a href = "{% url 'modelOverview' %}">Model</a>
-        <a href = "index.html">Predict</a>
+        <a href = "{% url 'predict' %}">Predict</a>
         <a href = "index.html">User</a>
         <a class = "login" href = "{% url 'login' %}">Login<i class="fa fa-fw fa-user"></i></a>
     </div>
