@@ -140,12 +140,11 @@ strong {
 
 /* Home */
 .homeLanding {
-     margin-top: 64px;
      background-color: whitesmoke;
      min-height: 70vh;
      max-height: 90vh;
      max-width: 100vw;
-     padding: 50px 10vw;
+     padding: 10vh 10vw;
      flex-grow: 1;
 }
 
@@ -163,12 +162,10 @@ strong {
 
 /* Content */
 .contentSection {
-     margin-top: 64px;
      background-color: whitesmoke;
      min-height: 70vh;
-     max-height: 90vh;
      max-width: 100vw;
-     padding: 50px 10vw;
+     padding: 10vh 10vw; 
      flex-grow: 1;
 }
 
