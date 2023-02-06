@@ -20,7 +20,7 @@ urlpatterns = [
     path('', include('appGeneral.urls')),
     path('model/', include('appModel.urls')),
     path('user/', include('appUser.urls')),
-    # path('', include('app_data.urls')),
+    path('data/', include('appData.urls')),
     # path('', include('app_predict.urls')),
     path('admin/', admin.site.urls),
 ]

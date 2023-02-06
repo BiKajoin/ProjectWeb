@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'appGeneral.apps.AppGeneralConfig',
     'appModel.apps.AppModelConfig',
     'appUser.apps.AppUserConfig',
+    'appData.apps.AppDataConfig',
 ]
 
 MIDDLEWARE = [
