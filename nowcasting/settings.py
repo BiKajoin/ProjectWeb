@@ -126,7 +126,8 @@ STATIC_ROOT = 'static/'
 STATICFILES_DIRS = [
     "appGeneral/static",
     'appModel/static/',
-    'appData/static/'
+    'appData/static/',
+    'appUser/static/'
 ]
 
 # Default primary key field type

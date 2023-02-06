@@ -161,16 +161,6 @@ strong {
      font-weight: 700;
 }
 
-.mockupImage {
-     width: 100%;
-     height: 100%;
-     max-width: 70vw;
-     min-height: 40vh;
-     max-height: 60vh;
-     display: block;
-     margin: 0px auto;
-}
-
 /* Content */
 .contentSection {
      margin-top: 64px;
@@ -182,15 +172,21 @@ strong {
      flex-grow: 1;
 }
 
-.contentUserSection {
-     margin-top: 64px;
-     background-color: whitesmoke;
-     min-height: 70vh;
-     max-height: 90vh;
-     max-width: 100vw;
-     padding: 50px 10vw;
-     padding-bottom: 50px;
-     flex-grow: 1;
+.mockupImage {
+     width: 100%;
+     height: 100%;
+     max-width: 70vw;
+     min-height: 40vh;
+     max-height: 60vh;
+     display: block;
+     margin: 0px auto;
+}
+
+.fullImage {
+     width: 100%;
+     max-width: 70vw;
+     display: block;
+     margin: 0px auto;
 }
 
 /* Login */
