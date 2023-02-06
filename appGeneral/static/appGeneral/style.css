@@ -182,6 +182,17 @@ strong {
      flex-grow: 1;
 }
 
+.contentUserSection {
+     margin-top: 64px;
+     background-color: whitesmoke;
+     min-height: 70vh;
+     max-height: 90vh;
+     max-width: 100vw;
+     padding: 50px 10vw;
+     padding-bottom: 50px;
+     flex-grow: 1;
+}
+
 /* Login */
 .loginWrapper {
      background-color: whitesmoke;
@@ -251,6 +262,17 @@ input[type="password"]:focus {
      background-color: #329dd5;
      -webkit-transition: all 0.2s ease;
      transition: all 0.2s ease;
+}
+
+.buttonWrapper {
+     display: flex;
+     justify-content: right;
+     margin-top: 16px;
+     margin-bottom: 16px;
+}
+
+.buttonWrapper button {
+     margin-right: 10px;
 }
 
 /*ul {
@@ -324,5 +346,6 @@ li a:hover {
 }
 
 /*----------------------------------------------------------------------------- 
-03=MAIN  
+03=Unique Element
 -----------------------------------------------------------------------------*/
+
