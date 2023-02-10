@@ -83,12 +83,8 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'userdatabase',
         'ENFORCE_SCHEMA': False,
-        'CLIENT  ': {
-            'HOST': 'mongodb+srv://witong:hAwbOxLzs7zjbxQo@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority',
-            'USER': 'witong',
-            'PASSWORD': 'hAwbOxLzs7zjbxQo',
-            'NAME': 'userdatabase',
-            'AUTHMECHANISM': 'SCRAM-SHA-1',
+        'CLIENT': {
+            'host': 'mongodb+srv://witong:hAwbOxLzs7zjbxQo@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority'
        }
     }
 }
