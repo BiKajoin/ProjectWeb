@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import certifi
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,11 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
-    'appGeneral.apps.AppGeneralConfig',
-    'appData.apps.AppDataConfig',
-    'appModel.apps.AppModelConfig',
-    'appUser.apps.AppUserConfig'
+
+    'appGeneral',
+    'appData',
+    'appModel',
+    'appUser'
+
 ]
 
 MIDDLEWARE = [
@@ -83,12 +85,9 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'userdatabase',
         'ENFORCE_SCHEMA': False,
-        'CLIENT  ': {
-            'HOST': 'mongodb+srv://witong:hAwbOxLzs7zjbxQo@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority',
-            'USER': 'witong',
-            'PASSWORD': 'hAwbOxLzs7zjbxQo',
-            'NAME': 'userdatabase',
-            'AUTHMECHANISM': 'SCRAM-SHA-1',
+        'CLIENT': {
+            # 'HOST': 'mongodb+srv://witong:hAwbOxLzs7zjbxQo@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority',
+            'host': 'mongodb+srv://wannawanna:d1Dj8cOiWwUCIxQs@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority',
        }
     }
 }
