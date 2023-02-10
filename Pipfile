@@ -5,6 +5,11 @@ name = "pypi"
 
 [packages]
 django = "*"
+dnspython = "*"
+certifi = "*"
+djongo = "*"
+pymongo = "==3.12.3"
+pytz = "*" 
 
 [dev-packages]
 

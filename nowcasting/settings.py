@@ -80,8 +80,16 @@ WSGI_APPLICATION = 'nowcasting.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': 'userdatabase',
+        'ENFORCE_SCHEMA': False,
+        'CLIENT  ': {
+            'HOST': 'mongodb+srv://witong:hAwbOxLzs7zjbxQo@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority',
+            'USER': 'witong',
+            'PASSWORD': 'hAwbOxLzs7zjbxQo',
+            'NAME': 'userdatabase',
+            'AUTHMECHANISM': 'SCRAM-SHA-1',
+       }
     }
 }
 
@@ -125,7 +133,7 @@ STATIC_ROOT = 'static/'
 
 STATICFILES_DIRS = [
     "appGeneral/static",
-    'appModel/static/',
+    #'appModel/static/',
     'appData/static/',
     'appUser/static/'
 ]
