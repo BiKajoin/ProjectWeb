@@ -1,0 +1,18 @@
+{% extends 'appGeneral/components/baseLogined.html' %}
+{% load static %}
+
+{% block content %}
+<section class="homeLanding">
+  <div class="loginWrapper">
+    <h2>Logout</h2>
+      <form method="POST">
+        {% csrf_token %}
+        <p>
+          <input type="submit" id="Logout" value="Logout">
+        </p>
+      </form> 
+    
+  </div><!--logout -->
+</section>
+{% endblock %}
+

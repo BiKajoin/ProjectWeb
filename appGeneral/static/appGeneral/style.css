@@ -119,6 +119,12 @@ strong {
      color: #579BB1;
 }
 
+/*.siteHeader a.logout {
+     margin-left: auto;
+     background-color: #333333;
+     color: #579BB1;
+}*/
+
 /* Site Footer */
 .siteFooter {
      background-color: rgb(17, 145, 188);
@@ -166,6 +172,15 @@ strong {
      min-height: 70vh;
      max-width: 100vw;
      padding: 10vh 10vw; 
+     flex-grow: 1;
+}
+
+.logined {
+     background-color: whitesmoke;
+     min-height: 70vh;
+     max-height: 90vh;
+     max-width: 100vw;
+     padding: 10vh 10vw;
      flex-grow: 1;
 }
 
@@ -341,4 +356,3 @@ li a:hover {
 /*----------------------------------------------------------------------------- 
 03=Unique Element
 -----------------------------------------------------------------------------*/
-

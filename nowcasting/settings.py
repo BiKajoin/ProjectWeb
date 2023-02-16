@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'appGeneral',
     'appData',
     'appModel',
-    'appUser'
+    #'appUser'
 
 ]
 
@@ -86,7 +86,7 @@ DATABASES = {
         'NAME': 'userdatabase',
         'ENFORCE_SCHEMA': False,
         'CLIENT': {
-            # 'HOST': 'mongodb+srv://witong:hAwbOxLzs7zjbxQo@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority',
+            #'host': 'mongodb+srv://witong:hAwbOxLzs7zjbxQo@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority',
             'host': 'mongodb+srv://wannawanna:d1Dj8cOiWwUCIxQs@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority',
         }
     }
@@ -134,7 +134,7 @@ STATICFILES_DIRS = [
     "appGeneral/static",
     #'appModel/static/',
     'appData/static/',
-    'appUser/static/'
+    #'appUser/static/'
 ]
 
 # Default primary key field type

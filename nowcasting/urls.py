@@ -20,6 +20,6 @@ urlpatterns = [
     path('', include('appGeneral.urls')),
     path('model/', include('appModel.urls')),
     path('data/', include('appData.urls')),
-    path('user/', include('appUser.urls')),
+    #path('user/', include('appUser.urls')),
     path('admin/', admin.site.urls),
 ]
