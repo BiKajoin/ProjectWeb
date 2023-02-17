@@ -8,8 +8,8 @@ django = "*"
 dnspython = "*"
 certifi = "*"
 djongo = "*"
-pymongo = "==3.12.3"
 pytz = "*" 
+pymongo = {extras = ["gssapi", "snappy", "srv", "tls"], version = "==3.12.3"}
 
 [dev-packages]
 autopep8 = "*"

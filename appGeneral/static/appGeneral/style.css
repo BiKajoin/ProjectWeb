@@ -113,15 +113,14 @@ strong {
      color: white;
 }
 
-.siteHeader a.login {
+.siteHeader a.rightmost {
      margin-left: auto;
-     background-color: #333333;
-     color: #579BB1;
 }
 
-.siteHeader a.user {
+.siteHeader a.login {
      background-color: #333333;
      color: #579BB1;
+     justify-content: flex-end;
 }
 
 /* Site Footer */
