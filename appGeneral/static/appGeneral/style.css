@@ -50,6 +50,11 @@ h5 {
      font-size: 24px;
 }
 
+h5.footer{
+     color: black;
+     padding-top: 16px;
+}
+
 h6 {
      font-size: 20px;
 }

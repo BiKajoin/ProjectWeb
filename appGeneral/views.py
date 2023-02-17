@@ -5,8 +5,6 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def home(request):
-    if request.user.is_authenticated:
-        return redirect('/homeLogined')
     return render(request, 'appGeneral/home.html')
 
 """def homeLogined(request):
@@ -14,9 +12,9 @@ def home(request):
         return render(request, 'appGeneral/homeLogined.html')
     return redirect('/login')"""
 
-@login_required
-def homeLogined(request):
-    return render(request, 'appGeneral/homeLogined.html')
+# @login_required
+# def homeLogined(request):
+#     return render(request, 'appGeneral/homeLogined.html')
 
 """def logined(request):
     if request.user.is_authenticated == False:
@@ -24,12 +22,12 @@ def homeLogined(request):
     return render(request, 'appGeneral/logined.html')"""
 
 @login_required
-def logined(request):
-    return render(request, 'appGeneral/logined.html')
+def loggedin(request):
+    return render(request, 'appGeneral/loggedin.html')
 
 def loginp(request):
     if request.user.is_authenticated:
-        return redirect('/logined')
+        return redirect('/loggedin')
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -41,7 +39,7 @@ def loginp(request):
             context ={"error": "Invalid username or password"}
             return render(request, 'appGeneral/login.html', context)
         login(request, user)
-        return redirect('/homeLogined')
+        return redirect('/')
     return render(request, 'appGeneral/login.html',{})
 
 @login_required

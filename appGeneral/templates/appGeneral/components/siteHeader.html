@@ -1,9 +1,17 @@
 <div id="header">
     <div class="siteHeader">
         <a href="{% url 'home' %}">Nowcasting<i class="fa fa-fw fa-sun-o"></i></a>
-        <!--<a href = "{% url 'data' %}">Data</a> -->
-        <!--<a href = "{% url 'modelOverview' %}">Model</a>-->
-        <!--<a href = "{% url 'predict' %}">Predict</a>-->
-        <a class = "login rightmost" href = "{% url 'login' %}">Login<i class="fa fa-fw fa-user"></i></a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'data' %}">Data</a>
+            <a href="{% url 'modelOverview' %}">Model</a>
+            <a href="{% url 'predict' %}">Predict</a>
+            {% if request.user.is_superuser %}
+                <a href="/admin">User</a>
+            {% endif %}
+            <a class="user rightmost" href=""> <i class="fa fa-fw fa-user" aria-hidden = "true"></i>{{request.user.username}}</a>
+            <a class="login" href="{% url 'logout' %}">Logout<i class="fa fa-sign-out" aria-hidden="true"></i></a>
+        {% else %}
+            <a class = "login rightmost" href = "{% url 'login' %}">Login<i class="fa fa-fw fa-user"></i></a>
+        {% endif %}
     </div>
 </div> <!-- Header -->	
