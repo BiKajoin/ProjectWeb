@@ -119,11 +119,10 @@ strong {
      color: #579BB1;
 }
 
-/*.siteHeader a.logout {
-     margin-left: auto;
+.siteHeader a.user {
      background-color: #333333;
      color: #579BB1;
-}*/
+}
 
 /* Site Footer */
 .siteFooter {

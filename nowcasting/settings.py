@@ -57,6 +57,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'nowcasting.urls'
+LOGIN_URL = '/login/'
 
 TEMPLATES = [
     {
