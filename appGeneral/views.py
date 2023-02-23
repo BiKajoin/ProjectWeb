@@ -7,15 +7,6 @@ from django.contrib.auth.decorators import login_required
 def home(request):
     return render(request, 'appGeneral/home.html')
 
-"""def homeLogined(request):
-    if request.user.is_authenticated:
-        return render(request, 'appGeneral/homeLogined.html')
-    return redirect('/login')"""
-
-# @login_required
-# def homeLogined(request):
-#     return render(request, 'appGeneral/homeLogined.html')
-
 """def logined(request):
     if request.user.is_authenticated == False:
         return redirect('/login')
