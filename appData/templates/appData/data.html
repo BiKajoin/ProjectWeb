@@ -4,6 +4,19 @@
 {% block content %}
 <section class = "contentSection">
     <h1>Uploaded Data</h1>
+    
+    <h4 style="margin-top: 10px; margin-left: 10px;">Select Date</h4>
+    <div id="dateForm">
+      <form>
+          <div class="dateGroup">
+              <label for="startdate">Start</label>
+              <input type="date" class="form-control" id="date" name="startdate" value="{{ startdate }}">
+              <label for="enddate">End</label>
+              <input type="date" class="form-control" id="date" name="enddate" value="{{ enddate }}">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
     <table class="table table-striped table-bordered">
         <thead>
           <tr>
@@ -19,7 +32,11 @@
         <tbody>
             {% for i in data %}
             <tr>
-              <td>{{ i.datetime }}</td>
+              {% if i.minute >= 10 %}
+                <td>{{ i.year }}/{{ i.month }}/{{ i.day }} {{ i.hour }}:{{ i.minute }}</td>
+              {% else %}
+                <td>{{ i.year }}/{{ i.month }}/{{ i.day }} {{ i.hour }}:0{{ i.minute }}</td>
+              {% endif %}
               <td>{{ i.Tm }}</td>
               <td>{{ i.Irradiance }}</td>
               <td>{{ i.W }}</td>

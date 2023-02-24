@@ -286,6 +286,23 @@ input[type="password"]:focus {
      margin-right: 10px;
 }
 
+.dateGroup {
+     display: flex;
+     margin-bottom: 15px;
+}
+
+.dateGroup label{
+     display: flex;
+     margin-left: 5px;
+     margin-right: 10px;
+}
+
+#dateForm {
+     display: flex;
+     justify-content: left;
+     margin-bottom: 15px;
+     margin-left: 15px;
+}
 /*ul {
      list-style-type: none;
      margin: 0;

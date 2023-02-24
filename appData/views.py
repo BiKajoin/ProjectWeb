@@ -17,9 +17,10 @@ def data(request):
     # Retrieve data from MongoDB
     dt = collection.find().limit(20)
     #dt.aggregate([{ '$addField': { 'Date': { "$toDate": {"$dateToString":{"datetime":"$clusterTime"}} }, } }])
-    """dt = list(dt)
+    dt = list(dt)
     for i in range(0,20):
-        print(dt[i]['datetime'])"""
+        timestamp = datetime.fromtimestamp(dt[0]['datetime'].time)
+        print(timestamp)
         #dt[i]['datetime'] = dt[i]['datetime']*1000
 
     # Pass data to template
