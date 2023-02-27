@@ -303,6 +303,13 @@ input[type="password"]:focus {
      margin-bottom: 15px;
      margin-left: 15px;
 }
+
+/*#dataTable {
+     width: 100%;
+     border-collapse: collapse;
+     overflow-x: scroll;
+}*/
+
 /*ul {
      list-style-type: none;
      margin: 0;
