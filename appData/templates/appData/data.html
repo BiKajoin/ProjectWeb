@@ -47,10 +47,42 @@
           {% endfor %}
         </tbody>
       </table>
+      {% if isFiltered != None %}
+        {% if data.has_other_pages %}
+          
+          <div class="pagination" id="dataIndex">
+          {% if data.has_previous %}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{ data.previous_page_number }}">Previous</a>
+          {% endif %}
 
+          <span class="current-page">
+            Page {{ data.number }} of {{ data.paginator.num_pages }}.
+          </span>
+
+          {% if data.has_next %}
+            <a href="?page={{ data.next_page_number }}">Next</a>
+            <a href="?page={{ data.paginator.num_pages }}">Last &raquo;</a>
+          {% endif %}
+          </div>
+        {% endif %}
+      {% endif %}
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
       <script>
-        $(document).ready(function() {
+        
+        /*$(document).on('click', '.pagination a', function(event) {
+          event.preventDefault();
+          var url = $(this).attr('href');
+          $.ajax({
+            url: url,
+            success: function(data) {
+              $('#dataTable').html(data);
+            }
+          });
+        });*/
+
+        /*$(document).ready(function() {
           $('form').on('submit', function(event) {
             event.preventDefault();
             var startdate = $('#startdate').val();
@@ -68,7 +100,23 @@
               }
             });
           });
+        });*/
+        
+        /*var isFiltered = '{{isFiltered}}';
+        if(isFiltered == 'true') {
+          $(document).on('click', '.pagination a', function(event) {
+          event.preventDefault();
+          var url = $(this).attr('href');
+          $.ajax({
+            url: url,
+            success: function(data) {
+              $('#dataTable').html(data);
+              alert("filterwork somehow");
+            }
+          });
         });
+          //$('#dateForm').hide();
+        }*/
       </script>
 
 </section>

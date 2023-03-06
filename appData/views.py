@@ -1,17 +1,18 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from appData.models import PVCellData
 from pymongo import MongoClient
 from datetime import datetime
+import itertools
+
 
 
 # Create your views here.
 @login_required
 def data(request):
-
-# Connect to MongoDB
     client = MongoClient('mongodb+srv://wannawanna:d1Dj8cOiWwUCIxQs@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
     db = client['userdatabase']
     collection = db['pvcelldata']
@@ -19,7 +20,7 @@ def data(request):
     startdate = request.GET.get('startdate', '')
     enddate = request.GET.get('enddate', '')
 
-    if startdate and enddate:
+    if (startdate and enddate):
         startdate = datetime.strptime(startdate, '%Y-%m-%d')
         startyear = startdate.year
         startmonth = startdate.month
@@ -29,13 +30,54 @@ def data(request):
         endyear = enddate.year
         endmonth = enddate.month
         endday = enddate.day
-        
-        filtered_data = collection.find({'year': {'$gte': startyear, '$lte': endyear}, 'month': {'$gte': startmonth, '$lte': endmonth}, 'day': {'$gte': startday, '$lte': endday}})
+        if(startyear==endyear and startmonth<endmonth):
+            if endmonth - startmonth > 1:
+                filtered_data = collection.find({'year': {'$eq': startyear}, 'month': {'$eq': startmonth}, 'day': {'$gte': startday}})
+                for i in range(startmonth+1, endmonth):
+                    filtered_data1 = collection.find({'year': {'$eq': startyear}, 'month': {'$eq': i}})
+                    filtered_data = itertools.chain(filtered_data, filtered_data1)
+                filtered_data1 = collection.find({'year': {'$eq': startyear}, 'month': {'$eq': endmonth}, 'day': {'$lte': endday}})
+                filtered_data = itertools.chain(filtered_data, filtered_data1)
+            else: 
+                filtered_data1 = collection.find({'year': {'$eq': startyear}, 'month': {'$eq': startmonth}, 'day': {'$gte': startday}})
+                print("startyear",startyear)
+                filtered_data2 = collection.find({'year': {'$eq': startyear}, 'month': {'$eq': endmonth}, 'day': {'$lte': endday}})
+                filtered_data = itertools.chain(filtered_data1, filtered_data2)
+        elif(startyear<endyear and startmonth<=endmonth):
+            filtered_data1 = collection.find({'year': {'$gte': startyear, '$lte': endyear}, 'month': {'$gte': startmonth, '$lte': endmonth}, 'day': {'$gte': startday, '$lte': endday}})
+        elif(startyear<endyear and startmonth>=endmonth):
+            filtered_data1 = collection.find({'year': {'$gte': startyear, '$lte': endyear}, 'month': {'$gte': startmonth, '$lte': endmonth}, 'day': {'$gte': startday, '$lte': endday}})
+        else:
+            filtered_data = collection.find({'year': {'$gte': startyear, '$lte': endyear}, 'month': {'$gte': startmonth, '$lte': endmonth}, 'day': {'$gte': startday, '$lte': endday}})
         filtered_data_list = list(filtered_data)
-        return render(request, 'appData/filter.html', {'data': filtered_data_list})
+        try:
+            filtered_paginator = Paginator(filtered_data_list, 20) # 20 items per page
+            filtered_page_number = request.GET.get('page')
+            filtered_page_data = filtered_paginator.get_page(filtered_page_number) 
+        except PageNotAnInteger:
+             filtered_page_data = filtered_paginator.page(1)
+        except EmptyPage:
+            filtered_page_data = filtered_paginator.page(filtered_paginator.num_pages)
+        context = {
+            'filtereddata': filtered_page_data,
+            'startdate': startdate,
+            'enddate': enddate,
+        }
+        return render(request, 'appData/filter.html', context) 
     else:
-        data = collection.find().limit(20)
+        data = collection.find()
         data_list = list(data)
-        return render(request, 'appData/data.html', {'data': data_list})
-
+        try:
+            paginator = Paginator(data_list, 20) # 20 items per page
+            page_number = request.GET.get('page')
+            page_data = paginator.get_page(page_number) 
+        except PageNotAnInteger:
+             page_data = paginator.page(1)
+        except EmptyPage:
+            page_data = paginator.page(paginator.num_pages)
+        context = {
+            'data': page_data,
+            'isFiltered': 'false',
+        }
+        return render(request, 'appData/data.html', context)    
 

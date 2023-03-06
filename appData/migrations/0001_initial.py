@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='pvcellData',
+            name='PVCellData',
             fields=[
                 ('_id', models.BigAutoField(primary_key=True, serialize=False)),
                 ('datetime', models.DateTimeField()),
