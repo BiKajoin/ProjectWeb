@@ -22,6 +22,7 @@ def data(request):
 
     if (startdate and enddate):
         startdate = datetime.strptime(startdate, '%Y-%m-%d')
+        print(startdate)
         startyear = startdate.year
         startmonth = startdate.month
         startday = startdate.day
@@ -40,19 +41,24 @@ def data(request):
                 filtered_data = itertools.chain(filtered_data, filtered_data1)
             else: 
                 filtered_data1 = collection.find({'year': {'$eq': startyear}, 'month': {'$eq': startmonth}, 'day': {'$gte': startday}})
-                print("startyear",startyear)
+                print("startyear",startyear, "startmonth", startmonth, "startday", startday)
                 filtered_data2 = collection.find({'year': {'$eq': startyear}, 'month': {'$eq': endmonth}, 'day': {'$lte': endday}})
+                print("endyear", endyear, "endmonth", endmonth, "endday", endday)
                 filtered_data = itertools.chain(filtered_data1, filtered_data2)
-        elif(startyear<endyear and startmonth<=endmonth):
+        elif(startyear<endyear and startmonth==endmonth):
+            print("hello1")
             filtered_data1 = collection.find({'year': {'$gte': startyear, '$lte': endyear}, 'month': {'$gte': startmonth, '$lte': endmonth}, 'day': {'$gte': startday, '$lte': endday}})
-        elif(startyear<endyear and startmonth>=endmonth):
+        elif(startyear<endyear and startmonth<=endmonth):
+            print("hello2")
             filtered_data1 = collection.find({'year': {'$gte': startyear, '$lte': endyear}, 'month': {'$gte': startmonth, '$lte': endmonth}, 'day': {'$gte': startday, '$lte': endday}})
         else:
-            filtered_data = collection.find({'year': {'$gte': startyear, '$lte': endyear}, 'month': {'$gte': startmonth, '$lte': endmonth}, 'day': {'$gte': startday, '$lte': endday}})
+            print("hello3")
+            filtered_data = collection.find({'year': {'$eq': startyear}, 'month': {'$eq': startmonth}, 'day': {'$gte': startday, '$lte': endday}})
         filtered_data_list = list(filtered_data)
         try:
             filtered_paginator = Paginator(filtered_data_list, 20) # 20 items per page
             filtered_page_number = request.GET.get('page')
+            print("page is", filtered_page_number)
             filtered_page_data = filtered_paginator.get_page(filtered_page_number) 
         except PageNotAnInteger:
              filtered_page_data = filtered_paginator.page(1)

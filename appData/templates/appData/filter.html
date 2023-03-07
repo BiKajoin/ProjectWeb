@@ -42,10 +42,12 @@
       </table>
       {% if filtereddata.has_other_pages %}
       <div class="pagination" id="dataIndex">
-        {% with querystring=request.GET.urlencode|stringreplace:'&page=':'' %}
+        <!--{% with querystring=request.GET.urlencode %}-->        
+       
+
           {% if filtereddata.has_previous %}
-            <a href="?{{ querystring }}&page=1">&laquo; First</a>
-            <a href="?{{ querystring }}&page={{ filtereddata.previous_page_number }}">Previous</a>
+            <a href="?startdate={{ startdate }}&enddate={{ enddate }}&page=1">&laquo; First</a>
+            <a href="?startdate={{ startdateString }}&enddate={{ enddateString }}&page={{ filtereddata.previous_page_number }}">Previous</a>
           {% endif %}
       
           <span class="current-page">
@@ -53,11 +55,14 @@
           </span>
       
           {% if filtereddata.has_next %}
-            <a href="?{{ querystring }}&page={{ filtereddata.next_page_number }}">Next</a>
-            <a href="?{{ querystring }}&page={{ filtereddata.paginator.num_pages }}">Last &raquo;</a>
+            <!--<a href="?{{ querystring }}&page={{ filtereddata.next_page_number }}">Next</a>-->
+            <a href="?startdate={{ startdate }}&enddate={{ enddate }}&page={{ filtereddata.next_page_number }}">Next</a>
+            <a href="?startdate={{ startdateString }}&enddate={{ enddateString }}&page={{ filtereddata.paginator.num_pages }}">Last &raquo;</a>
           {% endif %}
-        {% endwith %}
+
+        <!--{% endwith %} -->
       </div>
+    
       
       
       
