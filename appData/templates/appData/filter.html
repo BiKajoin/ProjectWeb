@@ -5,7 +5,7 @@
 <section class = "contentSection">
     <h1>Filtered Data</h1>
     <div style="margin-bottom: 10px;">
-      <h4 style="margin-top: 10px; margin-left: 10px;">The data is from {{ startdate }} to {{ enddate }}</h4>
+      <h4 style="margin-top: 10px; margin-left: 10px;">The data is from {{ startdateString }} to {{ enddateString }}</h4>
       <form>
           <button id="reset" type="submit" class="btn btn-primary">Back</button>
       </form>
@@ -41,12 +41,9 @@
         </tbody>
       </table>
       {% if filtereddata.has_other_pages %}
-      <div class="pagination" id="dataIndex">
-        <!--{% with querystring=request.GET.urlencode %}-->        
-       
-
+      <div class="pagination" id="dataIndex">       
           {% if filtereddata.has_previous %}
-            <a href="?startdate={{ startdate }}&enddate={{ enddate }}&page=1">&laquo; First</a>
+            <a href="?startdate={{ startdateString }}&enddate={{ enddateString }}&page=1">&laquo; First</a>
             <a href="?startdate={{ startdateString }}&enddate={{ enddateString }}&page={{ filtereddata.previous_page_number }}">Previous</a>
           {% endif %}
       
@@ -55,14 +52,11 @@
           </span>
       
           {% if filtereddata.has_next %}
-            <!--<a href="?{{ querystring }}&page={{ filtereddata.next_page_number }}">Next</a>-->
-            <a href="?startdate={{ startdate }}&enddate={{ enddate }}&page={{ filtereddata.next_page_number }}">Next</a>
+            <a href="?startdate={{ startdateString }}&enddate={{ enddateString }}&page={{ filtereddata.next_page_number }}">Next</a>
             <a href="?startdate={{ startdateString }}&enddate={{ enddateString }}&page={{ filtereddata.paginator.num_pages }}">Last &raquo;</a>
           {% endif %}
-
-        <!--{% endwith %} -->
       </div>
-    
+  
       
       
       

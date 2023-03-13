@@ -8,8 +8,6 @@ from pymongo import MongoClient
 from datetime import datetime
 import itertools
 
-
-
 # Create your views here.
 @login_required
 def data(request):
@@ -22,7 +20,6 @@ def data(request):
 
     if (startdate and enddate):
         startdate = datetime.strptime(startdate, '%Y-%m-%d')
-        print(startdate)
         startyear = startdate.year
         startmonth = startdate.month
         startday = startdate.day
@@ -31,6 +28,7 @@ def data(request):
         endyear = enddate.year
         endmonth = enddate.month
         endday = enddate.day
+    
         if(startyear==endyear and startmonth<endmonth):
             if endmonth - startmonth > 1:
                 filtered_data = collection.find({'year': {'$eq': startyear}, 'month': {'$eq': startmonth}, 'day': {'$gte': startday}})
@@ -41,16 +39,20 @@ def data(request):
                 filtered_data = itertools.chain(filtered_data, filtered_data1)
             else: 
                 filtered_data1 = collection.find({'year': {'$eq': startyear}, 'month': {'$eq': startmonth}, 'day': {'$gte': startday}})
-                print("startyear",startyear, "startmonth", startmonth, "startday", startday)
                 filtered_data2 = collection.find({'year': {'$eq': startyear}, 'month': {'$eq': endmonth}, 'day': {'$lte': endday}})
-                print("endyear", endyear, "endmonth", endmonth, "endday", endday)
                 filtered_data = itertools.chain(filtered_data1, filtered_data2)
-        elif(startyear<endyear and startmonth==endmonth):
-            print("hello1")
-            filtered_data1 = collection.find({'year': {'$gte': startyear, '$lte': endyear}, 'month': {'$gte': startmonth, '$lte': endmonth}, 'day': {'$gte': startday, '$lte': endday}})
-        elif(startyear<endyear and startmonth<=endmonth):
-            print("hello2")
-            filtered_data1 = collection.find({'year': {'$gte': startyear, '$lte': endyear}, 'month': {'$gte': startmonth, '$lte': endmonth}, 'day': {'$gte': startday, '$lte': endday}})
+        elif(startyear<endyear):
+            if endyear - startyear > 1:
+                print("hello1")
+                filtered_data1 = collection.find({'year': {'$gte': startyear, '$lte': endyear}, 'month': {'$gte': startmonth, '$lte': endmonth}, 'day': {'$gte': startday, '$lte': endday}})
+                filtered_data2 = collection.find({'year': {'$gte': startyear, '$lte': endyear}, 'month': {'$gte': startmonth, '$lte': endmonth}, 'day': {'$gte': startday, '$lte': endday}})
+            else: #good???
+                print("hello2")
+                filtered_data1 = collection.find({'year': {'$eq': startyear}, 'month': {'$gte': startmonth}})
+                filtered_data2 = collection.find({'year': {'$eq': endyear}, 'month': {'$lte': endmonth-1}})
+                filtered_data3 = collection.find({'year': {'$eq': endyear}, 'month': {'$lte': endmonth}, 'day': {'$lte': endday}})
+                filtered_data = itertools.chain(filtered_data1, filtered_data2)
+                filtered_data = itertools.chain(filtered_data, filtered_data3)
         else:
             print("hello3")
             filtered_data = collection.find({'year': {'$eq': startyear}, 'month': {'$eq': startmonth}, 'day': {'$gte': startday, '$lte': endday}})
@@ -66,8 +68,10 @@ def data(request):
             filtered_page_data = filtered_paginator.page(filtered_paginator.num_pages)
         context = {
             'filtereddata': filtered_page_data,
-            'startdate': startdate,
-            'enddate': enddate,
+            #'startdate': startdate,
+            #'enddate': enddate,
+            'startdateString': datetime.strftime(startdate, '%Y-%m-%d'),
+            'enddateString': datetime.strftime(enddate, '%Y-%m-%d'),
         }
         return render(request, 'appData/filter.html', context) 
     else:
