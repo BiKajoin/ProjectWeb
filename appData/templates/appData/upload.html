@@ -1,0 +1,23 @@
+{% extends 'appGeneral/components/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class = "contentSection">
+    <div class="container mt-5">
+        <h1 class="mb-4">Upload CSV</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="csv_file">CSV File:</label>
+                <input type="file" name="csv_file" id="csv_file" class="form-control-file">
+            </div>
+            <input type="submit" value="Upload" class="btn btn-primary">
+        </form>
+    </div>
+    <!-- Add Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/XvoD9JdQaI5Jf6p" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</section>
+{% endblock %}
