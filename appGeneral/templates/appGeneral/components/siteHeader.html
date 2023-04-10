@@ -6,7 +6,7 @@
             <a href="{% url 'modelOverview' %}">Model</a>
             <a href="{% url 'predict' %}">Predict</a>
             {% if request.user.is_superuser %}
-                <a href="/admin">User</a>
+                <a href="/admin" target="_blank">User</a>
             {% endif %}
             <a class="user rightmost" href=""> <i class="fa fa-fw fa-user" aria-hidden = "true"></i>{{request.user.username}}</a>
             <a class="login" href="{% url 'logout' %}">Logout<i class="fa fa-sign-out" aria-hidden="true"></i></a>
