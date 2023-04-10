@@ -204,6 +204,13 @@ strong {
      margin: 0px auto;
 }
 
+.graph{
+     width: 100%;
+     min-width: 800px;
+     display: flex;
+     justify-content: center;
+}
+
 /* Login */
 .loginWrapper {
      background-color: whitesmoke;

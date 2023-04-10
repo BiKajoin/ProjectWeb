@@ -4,8 +4,8 @@
 {% block content %}
 <section class = "homeLanding">
     <h1 class = "homeLandingHeader">Photovoltaic Cells Nowcasting</h1>
-    <div>
-        <img class = "mockupImage" src = "{% static 'appGeneral/images/predictionMockup.png' %}" alt = "Mockup picture">
+    <div class = "graph">
+        {{ plot_div|safe }}
     </div>
 </section>
 {% endblock %}
