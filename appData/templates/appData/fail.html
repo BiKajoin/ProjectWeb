@@ -1,0 +1,12 @@
+{% extends 'appGeneral/components/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class = "contentSection">
+    <h1>Upload Failed</h1>
+    <h3 style="color:black">Please Check Your File Type and try again.</p>
+    <a href="{% url 'upload' %}" class="btn btn-primary">Return to Upload Page</a>
+</section>
+{% endblock %}
+
+
