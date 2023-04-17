@@ -3,7 +3,7 @@ from djongo import models
 # Create your models here.
 class PVCellData (models.Model):
     _id = models.BigAutoField(primary_key = True, null = False)
-    #datetime = models.DateTimeField()
+    datetime = models.DateTimeField()
     year = models.IntegerField(null = False, default = 0)
     month = models.IntegerField(null = False, default = 0)
     day = models.IntegerField(null = False, default = 0)

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'djongo',
 
     'appGeneral',
     'appData',
@@ -89,6 +90,14 @@ DATABASES = {
         'CLIENT': {
             #'host': 'mongodb+srv://witong:hAwbOxLzs7zjbxQo@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority',
             'host': 'mongodb+srv://wannawanna:d1Dj8cOiWwUCIxQs@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority',
+        }
+    },
+    'pvcell': {
+        'ENGINE': 'djongo',
+        'NAME': 'pvcell',
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+            'host': 'mongodb+srv://wannawanna:d1Dj8cOiWwUCIxQs@cluster0.htuap5h.mongodb.net/pvcell?retryWrites=true&w=majority',
         }
     }
 }
