@@ -32,12 +32,9 @@
         <tbody>
             {% for i in data %}
             <tr>
-              {% if i.minute >= 10 %}
-                <td>{{ i.year }}/{{ i.month }}/{{ i.day }} {{ i.hour }}:{{ i.minute }}</td>
-              {% else %}
-                <td>{{ i.year }}/{{ i.month }}/{{ i.day }} {{ i.hour }}:0{{ i.minute }}</td>
-              {% endif %}
-              <td>{{ i.Tm }} </td>
+              <!--<td>{{ i.datetime }}</td>-->
+              <td>{{ i.datetime|date:'d M Y H:i' }}</td>
+              <td>{{ i.Tm }}</td>
               <td>{{ i.Irradiance }} </td>
               <td>{{ i.W  }}</td>
               <td>{{ i.VA  }}</td>
