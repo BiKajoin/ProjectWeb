@@ -44,7 +44,7 @@ def home(request):
             color = '#7f7f7f'
         )
     )
-
+    
     #convert plotly figure to html
     plot_div = fig.to_html(full_html = False)
 

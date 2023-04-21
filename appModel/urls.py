@@ -4,4 +4,5 @@ from . import views
 urlpatterns = [
     path('', views.model, name = 'modelOverview'),
     path('predict', views.predict, name = 'predict'),
+    path('predict_beta', views.predict_beta, name = 'predict_beta'),
 ]
