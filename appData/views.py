@@ -19,12 +19,31 @@ def data(request):
     client = MongoClient('mongodb+srv://wannawanna:d1Dj8cOiWwUCIxQs@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
     #client = MongoClient('localhost', 27017)
     db = client['data']
-    collection = db['admin-1']
-
+    # get a list of collection names in your database
+    collection_names = db.list_collection_names()
+    # get the selected collection name from the form submission
+    filtered_collection_names = [name for name in collection_names if f"{request.user.username}:" in name]
+    splited_collection_names = []
+    for col in filtered_collection_names:
+        temp = col.split(':')[1]
+        splited_collection_names.append(temp)
+    splited_collection_names.append("Admin")
+    splited_collection_names = sorted(splited_collection_names)
+    print(splited_collection_names)
+    selected = request.GET.get('collection', 'Admin')
+    if(selected != 'Admin'):
+        selected_collection = f"{request.user.username}:{selected}"
+    else:
+        selected_collection = selected
+    #collection = db['admin-1']
+    collection = db[selected_collection]
+    print("selected:",selected_collection)
+    
     startdate = request.GET.get('startdate', '')
     enddate = request.GET.get('enddate', '')
 
     if (startdate and enddate):
+
         startdate = datetime.strptime(startdate, '%Y-%m-%d')
         enddate = datetime.strptime(enddate, '%Y-%m-%d')
 
@@ -35,7 +54,7 @@ def data(request):
         try:
             filtered_paginator = Paginator(filtered_data_list, 20) # 20 items per page
             filtered_page_number = request.GET.get('page')
-            print("page is", filtered_page_number)
+            #print("page is", filtered_page_number)
             filtered_page_data = filtered_paginator.get_page(filtered_page_number) 
         except PageNotAnInteger:
              filtered_page_data = filtered_paginator.page(1)
@@ -45,6 +64,8 @@ def data(request):
             'filtereddata': filtered_page_data,
             'startdateString': datetime.strftime(startdate, '%Y-%m-%d'),
             'enddateString': datetime.strftime(enddate, '%Y-%m-%d'),
+            'collection_names': splited_collection_names,
+            'selected_collection': selected, 
         }
         return render(request, 'appData/filter.html', context)
     else: 
@@ -61,6 +82,8 @@ def data(request):
         context = {
             'data': page_data,
             'isFiltered': 'false',
+            'collection_names': splited_collection_names,
+            'selected_collection': selected,
         }
         return render(request, 'appData/data.html', context)   
 
@@ -82,14 +105,12 @@ def upload(request):
 
 @login_required
 def upload(request):
-    if request.method == 'POST' and request.FILES['csv_file']:
+    if request.method == 'POST' and request.FILES['csv_file'] and request.POST.get('name'):
         try:
-            """csv_file = request.FILES['csv_file']
-            file_path = default_storage.save(csv_file.name, ContentFile(csv_file.read()))
-            df = pd.read_csv(default_storage.open(file_path))"""
             csv_file = request.FILES['csv_file']
             file_bytes = BytesIO(csv_file.read())
             df = pd.read_csv(file_bytes)
+            df['datetime'] = pd.to_datetime(df['datetime'])
         except:
             print('Error uploading file')
             return redirect('fail')
@@ -104,7 +125,7 @@ def upload(request):
         data = df.to_dict('records')
         username = request.user.username
         try:
-            latest_collection = db["latestcollection"].find_one({"username": username})
+            """latest_collection = db["latestcollection"].find_one({"username": username})
 
             if latest_collection is None:
                 # create a new collection for the user if no previous collection exists
@@ -121,8 +142,16 @@ def upload(request):
                 collection_name = f"{username}:{collection_num}"
                 collection = db.create_collection(collection_name)
                 db["latestcollection"].update_one({"username": username}, {"$set": {"latest_collection": collection_name}})
-            collection = db[collection_name]
-            collection.insert_many(data)
+            """
+            collection_name = request.POST.get('name')
+            print(collection_name)
+            if not collection_name in db.list_collection_names():
+                collection_name = f"{username}:{collection_name}"
+                collection = db.create_collection(collection_name)
+                collection.insert_many(data)
+            else:
+                print('Collection name already exists')
+                return redirect('fail')
 
             #return render(request, 'appData/success.html')
             return redirect('success')

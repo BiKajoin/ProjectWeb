@@ -4,11 +4,25 @@
 {% block content %}
 <section class = "contentSection">
     <h1>Uploaded Data</h1>
-    
+    <h3 style="margin-top: 10px; margin-left: 10px;">Current Data: {{ selected_collection }}</h4>
+
+    <form method="GET" class="selectCollection" style="margin-left: 20px;">
+      <label for="collection">Select a collection:</label>
+      <select name="collection" id="collection">
+        <option value="{{ selected_collection }}">{{ selected_collection }}</option>
+          {% for collection_name in collection_names %}
+            {% if collection_name != selected_collection %}
+              <option value="{{ collection_name }}">{{ collection_name }}</option>
+            {% endif %}
+          {% endfor %}
+      </select>
+      <button type="submit" class="btn btn-primary" style="margin-left: 7px;">Submit</button>
+  </form>
     <h4 style="margin-top: 10px; margin-left: 10px;">Select Date</h4>
     <div id="dateForm">
       <form>
           <div class="dateGroup">
+              <input type="hidden" name="collection" value="{{ selected_collection }}">
               <label for="startdate">Start</label>
               <input type="date" class="form-control" id="startdate" name="startdate" value="2021-11-23" value="{{ startdate }}">
               <label for="enddate">End</label>
@@ -17,7 +31,7 @@
           </div>
       </form>
     </div>
-    <table class="table table-striped table-bordered" id="dataTable">
+    <table class="table table-striped table-bordered">
         <thead>
           <tr>
             <th>Datetime</th>
@@ -67,6 +81,8 @@
       {% endif %}
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
       <script>
         
         const form = document.querySelector('form');
@@ -79,6 +95,22 @@
             alert('The end date must be later than the start date.');
           }
         });
+
+
+        /*$(function() {
+          $("#collection").autocomplete({
+            source: function(request, response) {
+              $.ajax({
+                url: "/autocomplete/collection/",
+                data: { term: request.term },
+                success: function(data) {
+                  response(data);
+                }
+              });
+            },
+            minLength: 2
+          });
+        });*/
 
         /*$(document).on('click', '.pagination a', function(event) {
           event.preventDefault();

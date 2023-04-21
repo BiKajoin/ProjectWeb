@@ -293,12 +293,45 @@ input[type="password"]:focus {
      margin-right: 10px;
 }
 
+
+.selectCollection select {
+     font-size: 16px;
+     padding: 6px;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+}
+   
+/* style the label element */
+.selectCollection label {
+     font-size: 16px;
+     margin-right: 10px;
+}
+   
+/* style the submit button */
+.selectCollection button[type="submit"] {
+     font-size: 16px;
+     padding: 6px 12px;
+     background-color: #4CAF50;
+     color: white;
+     border: none;
+     border-radius: 4px;
+     cursor: pointer;
+}
+   
+/* style the selected option */
+.selectCollection option[selected] {
+     background-color: #4CAF50;
+     color: white;
+}
+
 .dateGroup {
      display: flex;
      margin-bottom: 15px;
 }
 
 .dateGroup label{
+     font-size: 16px;
+     margin-right: 10px;
      display: flex;
      margin-left: 5px;
      margin-right: 10px;
@@ -310,6 +343,18 @@ input[type="password"]:focus {
      justify-content: left;
      margin-bottom: 15px;
      margin-left: 15px;
+}
+
+th {
+     border-bottom: 1px solid #000000; /* add a 1px solid grey border to the bottom of each th element */
+     background-color: #6fa3fe9c;
+}
+
+.table-striped.table-bordered tbody tr:nth-of-type(odd) {
+     background-color: #ffffff; /* sets the background color of odd rows to grey */
+}
+.table-striped.table-bordered tbody tr:nth-of-type(even) {
+     background-color: #cde0ff; /* sets the background color of even rows to grey */
 }
 
 .pagination {
@@ -344,6 +389,17 @@ input[type="password"]:focus {
      /*margin-left: 5px;*/
      /*margin-right: 5px;*/ /* reduce the margin to center the page numbers with the next/previous links */
 }
+
+#uploadLabel {
+     font-size: 1.5rem; /* change the font size to 1.5rem */
+ }
+ 
+ .form-box {
+     background-color: #ddd; /* set the background color */
+     padding: 20px; /* set the padding */
+     border: 1px solid #ffffff00; /* set the border */
+     border-radius: 10px; /* set the border radius */
+ }
 
 /*.spinner {
      border: 8px solid #f3f3f3;

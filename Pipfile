@@ -4,14 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "4.1.7"
+django = "==4.1.7"
 dnspython = "*"
 certifi = "*"
-djongo = "1.3.6"
+djongo = "==1.3.6"
 pytz = "*" 
 pymongo = {extras = ["gssapi", "snappy", "srv", "tls"], version = "==3.12.3"}
 pandas = "*"
 plotly = "*"
+scikit-learn = "*"
+django-autocomplete-light = "*"
 
 [dev-packages]
 autopep8 = "*"
