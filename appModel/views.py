@@ -2,6 +2,7 @@
 from django.http import HttpResponse, JsonResponse, HttpResponseServerError
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django_tables2 import RequestConfig
 
 import json
 from google.protobuf.json_format import MessageToJson
@@ -16,6 +17,8 @@ import grpc
 from tensorflow.keras.preprocessing import sequence
 from tensorflow_serving.apis import predict_pb2, prediction_service_pb2_grpc
 from asgiref.sync import sync_to_async
+
+from appData.models import PVCellData, PVCellTable
 # Create your views here.
 
 
@@ -25,7 +28,33 @@ def model(request):
 
 @login_required
 def predict(request):
-    return render(request, 'appModel/predict.html')
+    client = MongoClient('mongodb+srv://wannawanna:d1Dj8cOiWwUCIxQs@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
+    db = client['data']
+    userCollectionNames = [name for name in db.list_collection_names() if f"{request.user.username}:" in name]
+
+    tempList = []
+    for col in userCollectionNames:
+        temp = col.split(':')[1]
+        tempList.append(temp)
+    userCollectionNames = sorted(tempList)
+    
+    if request.method == 'GET':
+        selected = request.GET.get('collection', userCollectionNames[0])
+        collection = db[f"{request.user.username}:{selected}"]
+
+        # convert cursor to list of dictionaries
+        dataList = list(collection.find())
+        
+        table = PVCellTable(dataList)
+        RequestConfig(request, paginate={'per_page': 20}).configure(table)
+
+        context = {
+            'PVCellTable': table,
+            'collection_names': userCollectionNames,
+            'selected_collection': selected,
+        }
+    
+    return render(request, 'appModel/predict.html', context)
 
 # to run tensorflow serving,  follow these steps
 # 1. install docker desktop

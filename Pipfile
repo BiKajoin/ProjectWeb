@@ -15,6 +15,7 @@ certifi = "*"
 pymongo = {extras = ["gssapi", "snappy", "srv", "tls"], version = "==3.12.3"}
 
 plotly = "*"
+django-tables2 = "*"
 pandas = "*"
 numpy = "*"
 scikit-learn = "*"

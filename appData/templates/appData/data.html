@@ -4,9 +4,10 @@
 {% block content %}
 <section class = "contentSection">
     <h1>Uploaded Data</h1>
-    <h3 style="margin-top: 10px; margin-left: 10px;">Current Data: {{ selected_collection }}</h4>
+    <h3 style="margin-top: 10px; margin-left: 10px;">Current Data: {{ selected_collection }}</h3>
 
-    <form method="GET" class="selectCollection" style="margin-left: 20px;">
+    {% include 'appData/components/selectDatabase.html' %}
+    <!-- <form method="GET" class="selectCollection" style="margin-left: 20px;">
       <label for="collection">Select a collection:</label>
       <select name="collection" id="collection">
         <option value="{{ selected_collection }}">{{ selected_collection }}</option>
@@ -17,7 +18,7 @@
           {% endfor %}
       </select>
       <button type="submit" class="btn btn-primary" style="margin-left: 7px;">Submit</button>
-  </form>
+  </form> -->
     <h4 style="margin-top: 10px; margin-left: 10px;">Select Date</h4>
     <div id="dateForm">
       <form>
