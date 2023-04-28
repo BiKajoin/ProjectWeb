@@ -1,11 +1,12 @@
 {% extends 'appGeneral/components/base.html' %}
+
 {% load static %}
+{% load render_table from django_tables2 %}
 
 {% block content %}
 <section class = "contentSection">
-    <h1>Photovoltaic Cells Prediction</h1>
-    <div>
-        <img class = "mockupImage" src = "{% static 'appGeneral/images/predictionMockup.png' %}" alt = "Mockup picture">
-    </div>
+    <h1>Photovoltaic Cells Nowcasting Prediction</h1>
+    {% include 'appData/components/selectDatabase.html' %}
+    {% render_table PVCellTable %}
 </section>
 {% endblock %}

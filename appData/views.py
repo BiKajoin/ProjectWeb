@@ -19,16 +19,17 @@ import pandas as pd
 @login_required
 def data(request):
     client = MongoClient('mongodb+srv://wannawanna:d1Dj8cOiWwUCIxQs@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
-    #client = MongoClient('localhost', 27017)
     db = client['data']
-    # get a list of collection names in your database
     collection_names = db.list_collection_names()
+
+    # get a list of collection names in your database
     # get the selected collection name from the form submission
     filtered_collection_names = [name for name in collection_names if f"{request.user.username}:" in name]
     splited_collection_names = []
     for col in filtered_collection_names:
         temp = col.split(':')[1]
         splited_collection_names.append(temp)
+    
     splited_collection_names.append("Admin")
     splited_collection_names = sorted(splited_collection_names)
     print(splited_collection_names)
