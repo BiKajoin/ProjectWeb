@@ -4,9 +4,14 @@
 {% load render_table from django_tables2 %}
 
 {% block content %}
-<section class = "contentSection">
+<section class="contentSection">
     <h1>Photovoltaic Cells Nowcasting Prediction</h1>
     {% include 'appData/components/selectDatabase.html' %}
     {% render_table PVCellTable %}
+    <form method = "GET" class = makePrediction>
+        <input type="hidden" name="makePrediction" value = "True"></input>
+        <input type="hidden" name="collection" value = "{{ collection }}"></input>
+        <button type="submit" class="btn btn-primary">Make Prediction</a>
+    </form>
 </section>
 {% endblock %}

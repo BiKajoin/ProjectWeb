@@ -1,12 +1,14 @@
-<form method="GET" class="selectCollection">
+<form method = "GET" class = "selectCollection">
+  <div>
     <label for="collection">Select a collection:</label>
     <select name="collection" id="collection">
-      <option value="{{ selected_collection }}">{{ selected_collection }}</option>
-        {% for collection_name in collection_names %}
-          {% if collection_name != selected_collection %}
-            <option value="{{ collection_name }}">{{ collection_name }}</option>
-          {% endif %}
-        {% endfor %}
+      <option value="{{ collection }}">{{ collection }}</option>
+      {% for collectionName in collectionNames %}
+        {% if collectionName != collection %}
+          <option value="{{ collectionName }}">{{ collectionName }}</option>
+        {% endif %}
+      {% endfor %}
     </select>
     <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
 </form>

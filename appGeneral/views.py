@@ -12,14 +12,15 @@ import plotly.graph_objects as go
 def home(request):
 
     #connect to mongodb and retrieve data cursor
-    client = MongoClient('mongodb+srv://wannawanna:d1Dj8cOiWwUCIxQs@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
+    client = MongoClient('mongodb+srv://pvcell:IXLCBUqW6U8FGUFr@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
     db = client['data']
-    collection = db['admin-1']
+    collection = db['admin1:second_half']
     projection = {'datetime': 1, 'W': 1}
     cursor = collection.find({}, projection)
 
     #convert pymongo cursor to pandas dataframe
     df = pd.DataFrame(list(cursor))
+    print(df.head())
     df['datetime'] = pd.to_datetime(df['datetime'])
 
     #fill in missing dates
@@ -46,10 +47,10 @@ def home(request):
     )
     
     #convert plotly figure to html
-    plot_div = fig.to_html(full_html = False)
+    graph = fig.to_html(full_html = False)
 
     #render html
-    return render(request, 'appGeneral/home.html', context = {'plot_div': plot_div})
+    return render(request, 'appGeneral/home.html', context = {'graph': graph})
 
 """def logined(request):
     if request.user.is_authenticated == False:
