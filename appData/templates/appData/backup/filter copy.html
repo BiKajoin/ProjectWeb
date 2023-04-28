@@ -1,0 +1,74 @@
+{% extends 'appGeneral/components/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class = "contentSection">
+    <h1>Filtered Data</h1>
+    <div style="margin-bottom: 10px;">
+      <h4 style="margin-top: 10px; margin-left: 10px;">The data is from {{ startdateString }} to {{ enddateString }}</h4>
+      <form>
+          <button id="reset" type="submit" class="btn btn-primary">Back</button>
+      </form>
+    </div>
+    <table class="table table-striped table-bordered" id="dataTable">
+        <thead>
+          <tr>
+            <th>Datetime</th>
+            <th>Temperature</th>
+            <th>Irradiance</th>
+            <th>W</th>
+            <th>VA</th>
+            <th>VAR</th>
+            <th>Cloud Cover</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for i in filtereddata %}
+            <tr>
+              {% if i.minute >= 10 %}
+                <td>{{ i.year }}/{{ i.month }}/{{ i.day }} {{ i.hour }}:{{ i.minute }}</td>
+              {% else %}
+                <td>{{ i.year }}/{{ i.month }}/{{ i.day }} {{ i.hour }}:0{{ i.minute }}</td>
+              {% endif %}
+              <td>{{ i.Tm }}</td>
+              <td>{{ i.Irradiance }}</td>
+              <td>{{ i.W }}</td>
+              <td>{{ i.VA }}</td>
+              <td>{{ i.Var }}</td>
+              <td>{{ i.cloud_cover }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% if filtereddata.has_other_pages %}
+      <div class="pagination" id="dataIndex">       
+          {% if filtereddata.has_previous %}
+            <a href="?startdate={{ startdateString }}&enddate={{ enddateString }}&page=1">&laquo; First</a>
+            <a href="?startdate={{ startdateString }}&enddate={{ enddateString }}&page={{ filtereddata.previous_page_number }}">Previous</a>
+          {% endif %}
+      
+          <span class="current-page">
+            Page {{ filtereddata.number }} of {{ filtereddata.paginator.num_pages }}.
+          </span>
+      
+          {% if filtereddata.has_next %}
+            <a href="?startdate={{ startdateString }}&enddate={{ enddateString }}&page={{ filtereddata.next_page_number }}">Next</a>
+            <a href="?startdate={{ startdateString }}&enddate={{ enddateString }}&page={{ filtereddata.paginator.num_pages }}">Last &raquo;</a>
+          {% endif %}
+      </div>
+  
+      
+      
+      
+      {% endif %}
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script>
+        document.getElementById("reset").onclick = function () {
+        location.href = "/data";
+    };
+  </script>
+
+</section>
+{% endblock %}
+        
