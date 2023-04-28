@@ -6,4 +6,5 @@ urlpatterns = [
     path('upload/', views.upload, name = 'upload'),
     path('success/', views.success_page, name='success'),
     path('fail/', views.fail_page, name='fail'),
+    path('drop-collection/', views.drop_collection, name='drop-collection'),
 ]

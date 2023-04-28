@@ -1,11 +1,13 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from appData.models import PVCellData
 from pymongo import MongoClient
 from datetime import datetime, timedelta
+
 
 import csv
 from django.core.files.storage import default_storage
@@ -85,64 +87,50 @@ def data(request):
             'collection_names': splited_collection_names,
             'selected_collection': selected,
         }
-        return render(request, 'appData/data.html', context)   
+        return render(request, 'appData/data.html', context)
 
-"""     
-@login_required
-def upload(request):
-    if request.method == 'POST' and request.FILES['csv_file']:
-        csv_file = request.FILES['csv_file']
-        data = csv.reader(csv_file)
-        client = MongoClient()
-        db = client['userdatabase']
-            for row in data:
-            # assume the CSV file has two columns: "name" and "age"
-            name, age = row
-            collection.insert_one({'name': name, 'age': age})
-        return render(request, 'success.html')
-    return render(request, 'appData/upload.html')
-"""
+def drop_collection(request):
+    if request.method == 'POST':
+        print("yippee")
+        collection_name = request.POST.get('delete_data')
+        target=f"{request.user.username}:{collection_name}"
+        if(collection_name=="Admin"):
+            messages.success(request, 'You cannot drop Admin collection!')
+            return redirect('data')
+        client = MongoClient('mongodb+srv://wannawanna:d1Dj8cOiWwUCIxQs@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
+        db = client['data']
+        db.drop_collection(target)
+        messages.success(request, 'Collection dropped!')
+        return redirect('data')
+    else:
+        return redirect('data')
 
 @login_required
 def upload(request):
     if request.method == 'POST' and request.FILES['csv_file'] and request.POST.get('name'):
         try:
-            csv_file = request.FILES['csv_file']
-            file_bytes = BytesIO(csv_file.read())
-            df = pd.read_csv(file_bytes)
+            csvFile = request.FILES['csv_file']
+            fileBytes = BytesIO(csvFile.read())
+            df = pd.read_csv(fileBytes)
+            # Connect to the MongoDB server
+            client = MongoClient('mongodb+srv://wannawanna:d1Dj8cOiWwUCIxQs@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
+            db = client['data']
+            # Check if DataFrame contains the correct fields in the correct order
+            expected_fields = ['datetime', 'year', 'month', 'day', 'hour', 'minute', 'second', 'Irradiance', 'Tm', 'Vdc', 'Idc', 'kWdc', 'kWhdc','Iac', 'Vln', 'VA', 'W', 'Var', 'pf','Hz', 'VAh', 'Whac', 'cloud_cover']
+            print(set(df.columns))
+            print(set(expected_fields))
+            if set(df.columns) != set(expected_fields):
+                print('Incorrect fields')
+                return redirect('fail')
             df['datetime'] = pd.to_datetime(df['datetime'])
         except:
             print('Error uploading file')
             return redirect('fail')
-
-        # Connect to the MongoDB server
-        client = MongoClient('mongodb+srv://wannawanna:d1Dj8cOiWwUCIxQs@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
-        #client = MongoClient('localhost', 27017)
-        db = client['data']
-        #collection = db['test']
-
+        
         # Convert the DataFrame to a list of dictionaries
         data = df.to_dict('records')
         username = request.user.username
         try:
-            """latest_collection = db["latestcollection"].find_one({"username": username})
-
-            if latest_collection is None:
-                # create a new collection for the user if no previous collection exists
-                collection_num = 1
-                collection_name = f"{username}:{collection_num}"
-                collection = db.create_collection(collection_name)
-                db["latestcollection"].insert_one({"username": username, "latest_collection": collection_name})
-            else:
-                # get the latest collection name for the user
-                collection_name = latest_collection["latest_collection"]
-                username, collection_num = collection_name.split(":")
-                collection_num = int(collection_num)
-                collection_num += 1
-                collection_name = f"{username}:{collection_num}"
-                collection = db.create_collection(collection_name)
-                db["latestcollection"].update_one({"username": username}, {"$set": {"latest_collection": collection_name}})
-            """
             collection_name = request.POST.get('name')
             print(collection_name)
             if not collection_name in db.list_collection_names():
