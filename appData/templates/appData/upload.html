@@ -30,9 +30,12 @@
             var file = document.getElementById("csv_file").value;
             var name = document.getElementById("name").value;
             
-            if (file == "" || name == "") {
-                alert("Please fill in both the file and name fields.");
+            if (file == "") {
+                alert("Please fill select file before submit.");
                 return false;
+            }
+            if (name == "") {
+                document.getElementById("name").value = "DEFAULT";
             }
     
             return true;

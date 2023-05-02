@@ -43,7 +43,7 @@ def home(request):
             family = 'Noto San, monospace',
             size = 16,
             color = '#7f7f7f'
-        )
+        ),
     )
     
     #convert plotly figure to html
@@ -51,11 +51,6 @@ def home(request):
 
     #render html
     return render(request, 'appGeneral/home.html', context = {'graph': graph})
-
-"""def logined(request):
-    if request.user.is_authenticated == False:
-        return redirect('/login')
-    return render(request, 'appGeneral/logined.html')"""
 
 @login_required
 def loggedin(request):
