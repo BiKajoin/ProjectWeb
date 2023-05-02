@@ -1,0 +1,15 @@
+{% extends 'appGeneral/components/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="contentSection">
+    <h1>Photovoltaic Cells Nowcasting Result</h1>
+    {% if graph %}
+        <div class = "graph">
+            {{ graph|safe }}
+        </div>
+    {% else %}
+        <p>Sorry, no graph available.</p>
+    {% endif %}
+</section>
+{% endblock %}

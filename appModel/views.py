@@ -1,5 +1,6 @@
 from django.http import HttpResponse, JsonResponse, HttpResponseServerError
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from asgiref.sync import sync_to_async, async_to_sync
 
@@ -7,15 +8,17 @@ from django_tables2 import RequestConfig
 import json
 from google.protobuf.json_format import MessageToJson
 
+import tensorflow as tf
 import numpy as np
 import pandas as pd
 from pymongo import MongoClient
 from sklearn.preprocessing import MinMaxScaler
+import plotly.graph_objects as go
 
-import tensorflow as tf
 import grpc
 from tensorflow_serving.apis import predict_pb2, prediction_service_pb2_grpc
-from appData.models import PVCellData, PVCellTable
+
+from appData.models import PVCellTable
 
 # Create your views here.
 
@@ -61,8 +64,13 @@ def predict(request):
         }
         
     return render(request, 'appModel/predict.html', context)
-    
-    
+
+@login_required
+def result(request):
+    graph = request.session.get('graph', None)
+    request.session.pop('graph', None)
+    print(graph)
+    return render(request, 'appModel/result.html', context = {'graph': graph})
 
 # to run tensorflow serving,  follow these steps
 # 1. install docker desktop
@@ -92,7 +100,6 @@ async def makePredictionRequest(data):
     return predictionResult
 
 async def batchData(data, batchSize, featureHorizon):
-    print(data.shape)
     batchedData = np.empty((0, batchSize, featureHorizon, 12))
 
     for i in range(0, data.shape[0] - batchSize, batchSize):
@@ -157,8 +164,16 @@ async def makePrediction(request):
     dataframeSelected = dataframeCleaned.drop(['Whac', 'VAh', 'Hz', 'kWhdc'], axis = 1)
 
     # Scale data 
-    scaler = MinMaxScaler()
-    dataframeScaled = scaler.fit_transform(dataframeSelected)
+    scalers = dict()
+    for col in dataframeSelected.columns:
+        scaler = MinMaxScaler()
+        scaler.fit(dataframeSelected[[col]])
+        scalers[col] = scaler
+
+    dataframeScaled = pd.DataFrame()
+    for col in dataframeSelected.columns:
+        scaler = scalers[col]
+        dataframeScaled[col] = scaler.transform(dataframe[[col]]).reshape(-1)
 
     # Batch data for prediction
     batchedData = await batchData(data = dataframeScaled, batchSize = 64, featureHorizon = 20)
@@ -166,4 +181,39 @@ async def makePrediction(request):
     # Use sync_to_async to run the send_request coroutine asynchronously
     predictionResult = await makePredictionRequest(batchedData)
 
-    return JsonResponse(predictionResult, safe = False)
+    # trim result from last batch since it's from padded value
+    predictionResult = predictionResult[:dataframeScaled.shape[0] - 20]
+
+    # re-rescale data to real value
+    predictionResult = scalers['W'].inverse_transform(np.array(predictionResult).reshape(-1, 1))
+
+    # add date back to prediction result
+    predictionResult = pd.DataFrame(predictionResult, columns = ['W'])
+    predictionResult['datetime'] = dataframe['datetime'].iloc[25:].reset_index(drop = True)
+
+    # plot scaled real value compare to prediontion result
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x = dataframe.index, y = dataframe['W'], name = 'Real Value'))
+    fig.add_trace(go.Scatter(x = predictionResult.index + 25, y = predictionResult['W'], name = 'Prediction Result'))
+    fig.update_layout(
+        autosize = True,
+        margin = dict(l = 20, r = 20, b = 20, t = 20, pad = 4),
+        xaxis_title = 'Datetime',
+        yaxis_title = 'Power Generation (W)',
+        font = dict(
+            family = 'Noto San, monospace',
+            size = 16,
+            color = '#7f7f7f'
+        ),
+        legend = dict(
+            yanchor = "top",
+            y = 0.99,
+            xanchor = "left",
+            x = 0.01
+        )
+    )
+
+    graph = fig.to_html(full_html = False)
+    request.session['graph'] = graph
+
+    return redirect(reverse('result'))

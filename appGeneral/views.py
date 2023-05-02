@@ -23,7 +23,7 @@ def home(request):
     print(df.head())
     df['datetime'] = pd.to_datetime(df['datetime'])
 
-    #fill in missing dates
+    # fill in missing dates
     start_date = df['datetime'].iloc[0]
     end_date = df['datetime'].iloc[-1]
     date_range = pd.date_range(start = start_date, end = end_date, freq='1min')
@@ -31,7 +31,7 @@ def home(request):
     missing_rows = pd.DataFrame({'datetime': missing_dates, 'W': None})
     df = pd.concat([df, missing_rows]).sort_values('datetime')
 
-    #plot data with plotly
+    # plot data with plotly
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=df['datetime'], y=df['W'], mode='lines', connectgaps = False))
     fig.update_layout(
