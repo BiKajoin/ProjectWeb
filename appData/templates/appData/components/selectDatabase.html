@@ -1,6 +1,7 @@
 <form method="GET" class="selectCollection">
+  <h3>Current Dataset: {{ collection }}</h4>
   <div style="display: flex; align-items: center;">
-    <label for="collection">Select a collection:</label>
+    <label for="collection">Select uploaded dataset:</label>
     <select name="collection" id="collection">
       <option value="{{ collection }}">{{ collection }}</option>
       {% for collectionName in collectionNames %}

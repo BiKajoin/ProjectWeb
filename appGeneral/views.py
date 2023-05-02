@@ -35,9 +35,8 @@ def home(request):
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=df['datetime'], y=df['W'], mode='lines', connectgaps = False))
     fig.update_layout(
-        autosize=True,
-        width=1000,
-        height=500,
+        autosize = True,
+        margin = dict(l = 20, r = 20, b = 20, t = 20, pad = 4),
         xaxis_title = 'Datetime',
         yaxis_title = 'Power Generation (W)',
         font = dict(

@@ -1,0 +1,16 @@
+<h4>Select Date</h4>
+<div id="dateForm">
+  <form>
+      <div class="dateGroup">
+          <input type="hidden" name="collection" value="{{ collection }}">
+
+          <label for="startdate">Start Date: </label>
+          <input type="datetime-local" class="form-control" id="startdate" name="startdate" value="2021-11-23T08:00" value="{{ startdate }}">
+
+          <label for="enddate">End Date: </label>
+          <input type="datetime-local" class="form-control" id="enddate" name="enddate" value="2021-11-24T18:00" value="{{ enddate }}">
+
+          <button type="submit" class="btn btn-primary" id="greenbtn">Apply</button>
+      </div>
+  </form>
+</div>

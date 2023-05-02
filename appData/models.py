@@ -1,5 +1,5 @@
 from djongo import models
-from django_tables2 import SingleTableView, Table, Column
+from django_tables2 import SingleTableView, Table, DateTimeColumn
 
 # Create your models here.
 class PVCellData (models.Model):
@@ -31,6 +31,7 @@ class PVCellData (models.Model):
     
 
 class PVCellTable(Table):
+    datetime = DateTimeColumn(format = 'd M Y H:i')
     class Meta:
         model = PVCellData
         fields = ('datetime', 'Tm', 'Irradiance', 'VA', 'W', 'Var', 'cloud_cover')
