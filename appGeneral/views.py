@@ -35,19 +35,34 @@ def home(request):
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=df['datetime'], y=df['W'], mode='lines', connectgaps = False))
     fig.update_layout(
-        width = 1200,
-        height = 800,
+        autosize=True,
+        width=1000,
+        height=500,
         xaxis_title = 'Datetime',
         yaxis_title = 'Power Generation (W)',
         font = dict(
             family = 'Noto San, monospace',
             size = 16,
             color = '#7f7f7f'
-        )
+        ),
     )
     
     #convert plotly figure to html
     graph = fig.to_html(full_html = False)
+
+    graph = f"""
+    <div id="plot_div" style="width: 100%; height: 0; padding-bottom: {100*(fig['layout']['height']/fig['layout']['width'])}%; position: relative;">
+        {graph}
+    </div>
+    <script>
+        window.addEventListener('resize', function() {{
+            var plotDiv = document.getElementById('plot_div');
+            var width = plotDiv.offsetWidth;
+            var height = width*({fig['layout']['height']/fig['layout']['width']});
+            Plotly.relayout(plotDiv, {{ width: width, height: height }});
+        }});
+    </script>
+    """
 
     #render html
     return render(request, 'appGeneral/home.html', context = {'graph': graph})

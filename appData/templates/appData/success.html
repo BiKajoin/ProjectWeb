@@ -4,7 +4,7 @@
 {% block content %}
 <section class = "contentSection">
     <h1>Upload Success</h1>
-    <h3 style="color:black">Your CSV file was uploaded successfully.</p>
+    <h3 style="color:black">Your CSV file was uploaded successfully as {{ collection_name }}.</p>
     <a href="{% url 'data' %}" class="btn btn-success">Return to Data Page</a>
     <a href="{% url 'upload' %}" class="btn btn-primary">Return to Upload Page</a>
 </section>
