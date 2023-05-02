@@ -63,7 +63,7 @@ body {
      background: url('images/notebook.png');
      /* add a fallback color of #d6d6d6 */
      color: #000000;
-     font-family: 'Lato', sans-serif;
+     font-family: 'Lato', 'Noto Sans', sans;
      line-height: 1.7;
      min-height: 100vh;
      /* line-height is unit-less */
@@ -82,6 +82,7 @@ strong {
 
 /* Site header */
 .siteHeader {
+     z-index: 1;
      background-color: rgb(17, 145, 188);
      box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.1);
      overflow: hidden;
@@ -130,6 +131,7 @@ strong {
 
 /* Site Footer */
 .siteFooter {
+     z-index: 1;
      background-color: rgb(17, 145, 188);
      text-align: center;
      margin-top: auto;
@@ -149,6 +151,7 @@ strong {
 
 /* Home */
 .homeLanding {
+     position: relative;
      background-color: whitesmoke;
      min-height: 70vh;
      max-height: 90vh;
@@ -205,10 +208,11 @@ strong {
 }
 
 .graph{
-     width: 100%;
-     min-width: 800px;
-     display: flex;
-     justify-content: center;
+     width: 70vw;
+     height: 60vh;
+     min-width: 700px;
+     min-height: 600px;
+     margin: 0 auto;
 }
 
 /* Login */
@@ -302,6 +306,9 @@ input[type="password"]:focus {
      border: none;
 }
 
+.selectCollection {
+     margin-bottom: 15px;
+}
 
 .selectCollection select {
      font-size: 16px;
@@ -335,28 +342,40 @@ input[type="password"]:focus {
 
 .dateGroup {
      display: flex;
-     margin-bottom: 15px;
+     margin-bottom: 16px;
 }
 
-.dateGroup label{
+.dateGroup label {
      font-size: 16px;
-     margin-right: 10px;
+     min-width: 80px;
      display: flex;
-     margin-left: 5px;
-     margin-right: 10px;
      align-items: center;
+}
+
+.dateGroup input {
+     margin-right: 12px;
 }
 
 #dateForm {
      display: flex;
      justify-content: left;
-     margin-bottom: 15px;
-     margin-left: 15px;
+     margin-bottom: 16px;
+}
+
+.dropDatabase {
+     display: flex;
+     justify-content: center;
+     margin-bottom: 16px;
 }
 
 th {
      border-bottom: 1px solid #000000; /* add a 1px solid grey border to the bottom of each th element */
      background-color: #6fa3fe9c;
+}
+
+.table {
+     font-size: 16px;
+     font-family: 'Noto Sans';
 }
 
 .table-striped.table-bordered tbody tr:nth-of-type(odd) {
