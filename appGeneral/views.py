@@ -49,27 +49,8 @@ def home(request):
     #convert plotly figure to html
     graph = fig.to_html(full_html = False)
 
-    graph = f"""
-    <div id="plot_div" style="width: 100%; height: 0; padding-bottom: {100*(fig['layout']['height']/fig['layout']['width'])}%; position: relative;">
-        {graph}
-    </div>
-    <script>
-        window.addEventListener('resize', function() {{
-            var plotDiv = document.getElementById('plot_div');
-            var width = plotDiv.offsetWidth;
-            var height = width*({fig['layout']['height']/fig['layout']['width']});
-            Plotly.relayout(plotDiv, {{ width: width, height: height }});
-        }});
-    </script>
-    """
-
     #render html
     return render(request, 'appGeneral/home.html', context = {'graph': graph})
-
-"""def logined(request):
-    if request.user.is_authenticated == False:
-        return redirect('/login')
-    return render(request, 'appGeneral/logined.html')"""
 
 @login_required
 def loggedin(request):
