@@ -13,12 +13,13 @@ import numpy as np
 import pandas as pd
 from pymongo import MongoClient
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import plotly.graph_objects as go
 
 import grpc
 from tensorflow_serving.apis import predict_pb2, prediction_service_pb2_grpc
 
-from appData.models import PVCellTable
+from appData.models import PVCellTable, fillBlankDate
 
 # Create your views here.
 
@@ -67,10 +68,9 @@ def predict(request):
 
 @login_required
 def result(request):
-    graph = request.session.get('graph', None)
-    request.session.pop('graph', None)
-    print(graph)
-    return render(request, 'appModel/result.html', context = {'graph': graph})
+    context = request.session.get('context', None)
+    request.session.pop('context', None)
+    return render(request, 'appModel/result.html', context)
 
 # to run tensorflow serving,  follow these steps
 # 1. install docker desktop
@@ -101,27 +101,28 @@ async def makePredictionRequest(data):
 
 async def batchData(data, batchSize, featureHorizon):
     batchedData = np.empty((0, batchSize, featureHorizon, 12))
+    padSize = 0
 
-    for i in range(0, data.shape[0] - batchSize, batchSize):
-        # Last element in batchedData has different shape
-        if i + batchSize + featureHorizon > data.shape[0]:
-            otherSize = data.shape[0] - i - featureHorizon
-            batch = np.empty((0, featureHorizon, 11))
-            for j in range(i, i + otherSize):
-                group = data[j:j+featureHorizon]
+    for i in range(featureHorizon, data.shape[0], batchSize):
+        if i + batchSize > data.shape[0]:
+            availableSize = data.shape[0] - i
+            batch = np.empty((0, featureHorizon, 12))
+            for j in range(i, i + availableSize):
+                group = data[j - featureHorizon:j]
                 batch = np.concatenate((batch, np.expand_dims(group, axis=0)), axis=0)
-            pad_size = ((0, batchSize - otherSize), (0, 0), (0, 0))
-            batch = np.pad(batch, pad_size, mode='constant', constant_values=0)
+            padSize = batchSize - availableSize
+            padDimension = ((0, padSize), (0, 0), (0, 0))
+            batch = np.pad(batch, padDimension, mode = 'constant', constant_values=0)
         
         else:
             batch = np.empty((0, featureHorizon, 12))
             for j in range(i, i + batchSize):
-                group = data[j:j+featureHorizon]
+                group = data[j - featureHorizon:j]
                 batch = np.concatenate((batch, np.expand_dims(group, axis=0)), axis=0)
 
         # Add batch to batchedData
         batchedData = np.concatenate((batchedData, np.expand_dims(batch, axis=0)), axis=0)
-    return batchedData
+    return batchedData, padSize
 
 async def testPrediction(request):
     # Connect to MongoDB database with requested database information
@@ -157,7 +158,8 @@ async def makePrediction(request):
     collection = database[f"{username}:{selectedCollection}"]
 
     # Retrieve data from collection
-    dataframe = pd.DataFrame(await sync_to_async(list)(collection.find({})))
+    dataframe = pd.DataFrame(await sync_to_async(list)(collection.find({}))).sort_values(by=['datetime'], ascending=True).reset_index(drop = True)
+    realValue = dataframe.loc[:, ['datetime', 'W']]
 
     # Drop unnecessary and unneeded data
     dataframeCleaned = dataframe.drop(['_id', 'datetime', 'year', 'month', 'day', 'hour', 'minute', 'second'], axis = 1)
@@ -165,36 +167,42 @@ async def makePrediction(request):
 
     # Scale data 
     scalers = dict()
+    dataframeScaled = pd.DataFrame()
     for col in dataframeSelected.columns:
         scaler = MinMaxScaler()
         scaler.fit(dataframeSelected[[col]])
+        dataframeScaled[col] = scaler.transform(dataframe[[col]]).reshape(-1)
         scalers[col] = scaler
 
-    dataframeScaled = pd.DataFrame()
-    for col in dataframeSelected.columns:
-        scaler = scalers[col]
-        dataframeScaled[col] = scaler.transform(dataframe[[col]]).reshape(-1)
-
     # Batch data for prediction
-    batchedData = await batchData(data = dataframeScaled, batchSize = 64, featureHorizon = 20)
+    batchedData, padSize = await batchData(data = dataframeScaled, batchSize = 64, featureHorizon = 20)
 
     # Use sync_to_async to run the send_request coroutine asynchronously
     predictionResult = await makePredictionRequest(batchedData)
 
     # trim result from last batch since it's from padded value
-    predictionResult = predictionResult[:dataframeScaled.shape[0] - 20]
+    predictionResult = predictionResult[:-padSize]
 
-    # re-rescale data to real value
-    predictionResult = scalers['W'].inverse_transform(np.array(predictionResult).reshape(-1, 1))
-
-    # add date back to prediction result
     predictionResult = pd.DataFrame(predictionResult, columns = ['W'])
     predictionResult['datetime'] = dataframe['datetime'].iloc[25:].reset_index(drop = True)
 
+    croppedReal = dataframeScaled['W'].iloc[25:]
+    croppedPred = predictionResult['W'].iloc[:-5]
+
+    rmse = mean_squared_error(croppedReal, croppedPred, squared = False)
+    mae = mean_absolute_error(croppedReal, croppedPred)
+    r2 = r2_score(croppedReal, croppedPred)
+
+    # re-rescale data to real value
+    predictionResult['W'] = scalers['W'].inverse_transform(np.array(predictionResult['W']).reshape(-1, 1))
+
+    realValue = fillBlankDate(realValue)
+    predictionResult = fillBlankDate(predictionResult, isPrediction = True)
+
     # plot scaled real value compare to prediontion result
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x = dataframe.index, y = dataframe['W'], name = 'Real Value'))
-    fig.add_trace(go.Scatter(x = predictionResult.index + 25, y = predictionResult['W'], name = 'Prediction Result'))
+    fig.add_trace(go.Scatter(x = realValue['datetime'], y = realValue['W'], name = 'Real Value', mode = 'markers+lines', marker = {'size': 3}))
+    fig.add_trace(go.Scatter(x = predictionResult['datetime'], y = predictionResult['W'], name = 'Prediction Result', mode = 'markers+lines', marker = {'size': 3}))
     fig.update_layout(
         autosize = True,
         margin = dict(l = 20, r = 20, b = 20, t = 20, pad = 4),
@@ -214,6 +222,15 @@ async def makePrediction(request):
     )
 
     graph = fig.to_html(full_html = False)
-    request.session['graph'] = graph
+
+    context = {
+        'rmse': rmse,
+        'mae': mae,
+        'r2': r2,
+        'graph': graph,
+        'collection': selectedCollection
+    }
+    
+    request.session['context'] = context
 
     return redirect(reverse('result'))

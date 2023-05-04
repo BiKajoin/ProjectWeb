@@ -7,6 +7,7 @@ from pymongo import MongoClient
 import pandas as pd
 
 import plotly.graph_objects as go
+from appData.models import fillBlankDate
 
 # Create your views here.
 def home(request):
@@ -24,12 +25,7 @@ def home(request):
     df['datetime'] = pd.to_datetime(df['datetime'])
 
     # fill in missing dates
-    start_date = df['datetime'].iloc[0]
-    end_date = df['datetime'].iloc[-1]
-    date_range = pd.date_range(start = start_date, end = end_date, freq='1min')
-    missing_dates = date_range[~date_range.isin(df['datetime'])]
-    missing_rows = pd.DataFrame({'datetime': missing_dates, 'W': None})
-    df = pd.concat([df, missing_rows]).sort_values('datetime')
+    df = fillBlankDate(df)
 
     # plot data with plotly
     fig = go.Figure()

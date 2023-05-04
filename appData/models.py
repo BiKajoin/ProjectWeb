@@ -1,6 +1,8 @@
 from djongo import models
 from django_tables2 import SingleTableView, Table, DateTimeColumn
 
+import pandas as pd
+
 # Create your models here.
 class PVCellData (models.Model):
     datetime = models.DateTimeField(verbose_name="Timestamp")
@@ -36,3 +38,14 @@ class PVCellTable(Table):
         model = PVCellData
         fields = ('datetime', 'Tm', 'Irradiance', 'VA', 'W', 'Var', 'cloud_cover')
         attrs = {"class": "table table-striped table-bordered"}
+
+def fillBlankDate(dataframe, isPrediction = False):
+    start_date = dataframe['datetime'].iloc[0]
+    if(isPrediction == True):
+        end_date = dataframe['datetime'].iloc[-6]
+    else:
+        end_date = dataframe['datetime'].iloc[-1]
+    date_range = pd.date_range(start = start_date, end = end_date, freq='1min')
+    missing_dates = date_range[~date_range.isin(dataframe['datetime'])]
+    missing_rows = pd.DataFrame({'datetime': missing_dates, 'W': None})
+    return pd.concat([dataframe, missing_rows]).sort_values('datetime').reset_index(drop = True)
