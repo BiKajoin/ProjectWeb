@@ -8,5 +8,6 @@ urlpatterns = [
     path('login/', views.loginp, name = 'login'),
     path('loggedin/', views.loggedin, name = 'loggedin'),
     path('logout/', views.logoutp, name = 'logout'),
-    #path('login/', views.login, {'authentication_form': LoginForm}, name = 'login'),
 ]
+
+handler404 = 'appGeneral.views.handle404'

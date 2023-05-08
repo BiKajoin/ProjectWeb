@@ -82,7 +82,7 @@ def result(request):
 # 2. in any terminal, run $docker pull tensorflow/serving
 # 3. in tfserving directory terminal, run $docker run -p 8500:8500 -p 8501:8501 --mount type=bind,source=absolute\path\to\work\folder\Web\tfserving\models\LSTM6x64_cloud_cover,target=/models/LSTM6x64_cloud_cover  -e MODEL_NAME=LSTM6x64_cloud_cover -t tensorflow/serving
 # for Wanna is $docker run -p 8500:8500 -p 8501:8501 --mount type=bind,source=C:\University\Year-4\Project\Python\Web\tfserving\models\LSTM6x64_cloud_cover,target=/models/LSTM6x64_cloud_cover  -e MODEL_NAME=LSTM6x64_cloud_cover -t tensorflow/serving
-
+#               docker run -p 8500:8500 -p 8501:8501 --mount type=bind,source=D:\ProjectWeb\tfserving\models\LSTM6x64_cloud_cover,target=/models/LSTM6x64_cloud_cover  -e MODEL_NAME=LSTM6x64_cloud_cover -t tensorflow/serving
 async def makePredictionRequest(data):
     predictionResult = []
     # Create the gRPC channel and stub
