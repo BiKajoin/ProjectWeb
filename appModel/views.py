@@ -42,13 +42,17 @@ def predict(request):
             tempList.append(temp)
         userCollectionNames = sorted(tempList)
     
-    if request.method == 'GET':
+    if(request.method == 'GET'):
         selected = request.GET.get('collection', userCollectionNames[0])
+        collection = db[f"{request.user.username}:{selected}"]
 
-        if(request.GET.get('makePrediction') == 'True'):
+        isAbleToPredict = False
+        if(collection.count_documents({}) >= 20):
+            isAbleToPredict = True
+
+        if(request.GET.get('makePrediction') == 'True' and isAbleToPredict):
             return async_to_sync(makePrediction)(request)
         
-        collection = db[f"{request.user.username}:{selected}"]
         pageNumber = request.POST.get('page', 1)
 
         # convert cursor to list of dictionaries
@@ -62,6 +66,7 @@ def predict(request):
             'collectionNames': userCollectionNames,
             'collection': selected,
             'page': pageNumber,
+            'isAbleToPredict': isAbleToPredict
         }
         
     return render(request, 'appModel/predict.html', context)
@@ -128,7 +133,7 @@ async def testPrediction(request):
     # Connect to MongoDB database with requested database information
     client = MongoClient('mongodb+srv://pvcell:IXLCBUqW6U8FGUFr@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
     db = client['data']
-    collection = db['Admin-1']
+    collection = db['display']
 
     # Retrieve data from collection
     dataframe = pd.DataFrame(list(collection.find({})))
@@ -136,16 +141,32 @@ async def testPrediction(request):
     dataframeCleaned = dataframe.drop(['_id', 'datetime', 'year', 'month', 'day', 'hour', 'minute', 'second'], axis = 1)
     dataframeSelected = dataframeCleaned.drop(['Whac', 'VAh', 'Hz', 'kWhdc'], axis = 1)
 
-    scaler = MinMaxScaler()
-    dataframeScaled = scaler.fit_transform(dataframeSelected)
+    # Scale data 
+    scalers = dict()
+    dataframeScaled = pd.DataFrame()
+    for col in dataframeSelected.columns:
+        scaler = MinMaxScaler()
+        scaler.fit(dataframeSelected[[col]])
+        dataframeScaled[col] = scaler.transform(dataframe[[col]]).reshape(-1)
+        scalers[col] = scaler
 
     # Batch data for prediction
-    batchedData = await batchData(data = dataframeScaled, batchSize = 64, featureHorizon = 20)   
+    batchedData, padSize = await batchData(data = dataframeScaled, batchSize = 64, featureHorizon = 20)
 
-    # Use sync_to_async to run the send_request coroutine asynchronously
-    prediction = await makePredictionRequest(batchedData)
+    predictionResult = await makePredictionRequest(batchedData)
 
-    return JsonResponse(json.dumps(prediction), safe=False)
+    # trim result from last batch since it's from padded value
+    predictionResult = predictionResult[:-padSize]
+
+    predictionResult = pd.DataFrame(predictionResult, columns = ['W'])
+    predictionResult['datetime'] = dataframe['datetime'].iloc[25:].reset_index(drop = True)
+
+    # inverse rescale data to real value
+    predictionResult['W'] = scalers['W'].inverse_transform(np.array(predictionResult['W']).reshape(-1, 1))
+
+    predictionResult.to_csv('predictionResult.csv', index = False)
+
+    return HttpResponse('ok', status = 200)
 
 async def makePrediction(request):
     # Retrieve database information from request
@@ -177,7 +198,6 @@ async def makePrediction(request):
     # Batch data for prediction
     batchedData, padSize = await batchData(data = dataframeScaled, batchSize = 64, featureHorizon = 20)
 
-    # Use sync_to_async to run the send_request coroutine asynchronously
     predictionResult = await makePredictionRequest(batchedData)
 
     # trim result from last batch since it's from padded value

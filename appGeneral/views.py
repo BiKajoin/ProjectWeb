@@ -15,21 +15,18 @@ def home(request):
     #connect to mongodb and retrieve data cursor
     client = MongoClient('mongodb+srv://pvcell:IXLCBUqW6U8FGUFr@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
     db = client['data']
-    collection = db['admin1:second_half']
-    projection = {'datetime': 1, 'W': 1}
-    cursor = collection.find({}, projection)
+    collection = db['homeMockup']
 
-    #convert pymongo cursor to pandas dataframe
-    df = pd.DataFrame(list(cursor))
-    print(df.head())
-    df['datetime'] = pd.to_datetime(df['datetime'])
+    # Retrieve data from collection
+    dataframe = pd.DataFrame(list(collection.find({})))
 
     # fill in missing dates
-    df = fillBlankDate(df)
+    dataframe = fillBlankDate(dataframe)
 
     # plot data with plotly
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df['datetime'], y=df['W'], mode='lines', connectgaps = False))
+    fig.add_trace(go.Scatter(x = dataframe['datetime'], y = dataframe['real'], name = 'Real Value'))
+    fig.add_trace(go.Scatter(x = dataframe['datetime'], y = dataframe['predict'], name = 'Prediction Result'))
     fig.update_layout(
         autosize = True,
         margin = dict(l = 20, r = 20, b = 20, t = 20, pad = 4),
@@ -40,6 +37,12 @@ def home(request):
             size = 16,
             color = '#7f7f7f'
         ),
+        legend = dict(
+            yanchor = "top",
+            y = 0.99,
+            xanchor = "left",
+            x = 0.01
+        )
     )
     
     #convert plotly figure to html

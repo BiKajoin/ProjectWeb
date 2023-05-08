@@ -7,11 +7,29 @@
 <section class="contentSection">
     <h1>Photovoltaic Cells Nowcasting Prediction</h1>
     {% include 'appData/components/selectDatabase.html' %}
+    {% if isAbleToPredict == False %}
+    <h6 class="warning">This dataset isn't available for prediction, need larger dataset.</h6>
+    {% endif %}
     {% render_table PVCellTable %}
-    <form method = "GET" class = makePrediction>
-        <input type="hidden" name="makePrediction" value = "True"></input>
-        <input type="hidden" name="collection" value = "{{ collection }}"></input>
+    <form method="GET" class="makePrediction middle">
+        <input type="hidden" name="makePrediction" value="True"></input>
+        <input type="hidden" name="collection" value="{{ collection }}"></input>
         <button type="submit" class="btn btn-primary">Make Prediction</a>
     </form>
+
+    <script>
+        // select makePrediction form
+        const makePredictionForm = document.querySelector('.makePrediction');
+        const isAbleToPredict = '{{ isAbleToPredict }}'.toLowerCase() == 'true';
+
+        makePredictionForm.addEventListener('submit', function (event) {
+            console.log('make prediction')
+            if (!isAbleToPredict) {
+                event.preventDefault();
+                alert('This dataset isn\'t available for prediction.\nDataset must be at least 20 rows.\nPlease select another dataset or upload new dataset.');
+            }
+        });
+
+    </script>
 </section>
 {% endblock %}

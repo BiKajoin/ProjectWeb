@@ -61,7 +61,6 @@ h6 {
 
 body {
      height: 100%;
-     background: url('images/notebook.png');
      /* add a fallback color of #d6d6d6 */
      color: #000000;
      font-family: 'Lato', 'Noto Sans', sans;
@@ -74,6 +73,10 @@ body {
 
 .clear {
      clear: both;
+}
+
+.warning {
+     color: red;
 }
 
 b,
@@ -363,9 +366,10 @@ input[type="password"]:focus {
      margin-bottom: 16px;
 }
 
-.dropDatabase {
+.middle {
      display: flex;
      justify-content: center;
+     margin-top: 16px;
      margin-bottom: 16px;
 }
 

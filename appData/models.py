@@ -47,5 +47,5 @@ def fillBlankDate(dataframe, isPrediction = False):
         end_date = dataframe['datetime'].iloc[-1]
     date_range = pd.date_range(start = start_date, end = end_date, freq='1min')
     missing_dates = date_range[~date_range.isin(dataframe['datetime'])]
-    missing_rows = pd.DataFrame({'datetime': missing_dates, 'W': None})
+    missing_rows = pd.DataFrame({'datetime': missing_dates, 'W': None, })
     return pd.concat([dataframe, missing_rows]).sort_values('datetime').reset_index(drop = True)
