@@ -9,7 +9,7 @@
   {% include 'appData/components/selectDatabase.html' %}
   {% include 'appData/components/selectDate.html' %}
   {% render_table PVCellTable %}
-  <form class="dropDatabase" action="{% url 'drop-collection' %}" method="POST">
+  <form class="middle" action="{% url 'drop-collection' %}" method="POST">
     {% csrf_token %}
     <input type="hidden" name="delete_data" value="{{ selected_collection }}">
     <input type="submit" value="Drop Collection" class="btn btn-danger" onclick="return confirmDrop();">
