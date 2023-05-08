@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -75,4 +75,8 @@ def logoutp(request):
         logout(request)
         return redirect('/')
     return render(request, 'appGeneral/logout.html',{})
+
+def handle404(request, exception):
+    return render(request, '404.html')
+
     
