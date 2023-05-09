@@ -600,4 +600,15 @@ li a:hover {
      width: 75%;
      height: 60%;
  }
+
+ #about {
+     font-size: 16px;
+     text-align: justify;
+     line-height: 25px;
+ }
+
+ #aboutBox {
+     text-indent: 50px;
+     font-family: 'Noto Sans' ;
+ }
  
