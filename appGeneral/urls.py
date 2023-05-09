@@ -8,6 +8,7 @@ urlpatterns = [
     path('login/', views.loginp, name = 'login'),
     path('loggedin/', views.loggedin, name = 'loggedin'),
     path('logout/', views.logoutp, name = 'logout'),
+    path('about/', views.about, name = 'about'),
 ]
 
 handler404 = 'appGeneral.views.handle404'

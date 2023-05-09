@@ -4,8 +4,58 @@
 {% block content %}
 <section class = "homeLanding">
     <h1 class = "homeLandingHeader">Photovoltaic Cells Nowcasting</h1>
+    <h3>Current Date: {{ date }}</h3>
     <div class="graph">
         {{ graph|safe }}
     </div>
+
+    <button class="btn btn-primary" onclick="showHelp()" id="floating-button">Help</button>
+    <div class="popup">
+      <button id="close"></button>
+      <h2>Help</h2>
+      <h4>PVcell Nowcasting: Features</h4>
+      <p><strong>Home Page:</strong> This page shows the lastest data of power generation and predicted results.</p>
+        {% if not user.is_authenticated %}
+            <p><strong>*Login is required to access other features.*</strong></p>
+        {% endif %}
+        {% if user.is_authenticated %}
+            <p><strong>Data Page:</strong> Data page uses for viewing data and managing data.</p>
+            <p><strong>Predict Page:</strong> Predict Paage uses for predicting the power generation with available dataset.</p>
+        {% endif %}
+        {% if request.user.is_superuser %}
+            <p><strong>User Management Page:</strong> Admin page uses for managing users.</p>
+        {% endif %}
+    </div>
+
+    <script>
+        function showHelp() {
+        console.log("Showing help");
+        var helpMenu = document.getElementById("helpMenu");
+        if (helpMenu.style.display === "none") {
+            helpMenu.style.display = "block";
+            document.addEventListener("click", hideHelpOnClickOutside);
+        } else {
+            helpMenu.style.display = "none";
+            document.removeEventListener("click", hideHelpOnClickOutside);
+        }
+        }
+
+        function hideHelpOnClickOutside(event) {
+        var helpMenu = document.getElementById("helpMenu");
+        if (!helpMenu.contains(event.target)) {
+            helpMenu.style.display = "none";
+            document.removeEventListener("click", hideHelpOnClickOutside);
+        }
+        }
+
+        document.querySelector("#floating-button").addEventListener("click", function () {
+        document.querySelector(".popup").style.display = "block";
+        });
+
+        document.querySelector("#close").addEventListener("click", function () {
+        document.querySelector(".popup").style.display = "none";
+        });
+    </script>
+
 </section>
 {% endblock %}

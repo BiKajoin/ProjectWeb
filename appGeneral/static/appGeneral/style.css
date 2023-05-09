@@ -435,6 +435,7 @@ th {
      font-size: 20px;
      padding: 10px 20px;
      border-radius: 50%;
+     z-index: 555;
 }
 
 /*.spinner {
@@ -590,5 +591,16 @@ li a:hover {
  #graph-container {
      width: 75%;
      height: 60%;
+ }
+
+ #about {
+     font-size: 16px;
+     text-align: justify;
+     line-height: 25px;
+ }
+
+ #aboutBox {
+     text-indent: 50px;
+     font-family: 'Noto Sans' ;
  }
  

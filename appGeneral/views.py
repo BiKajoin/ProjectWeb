@@ -19,7 +19,7 @@ def home(request):
 
     # Retrieve data from collection
     dataframe = pd.DataFrame(list(collection.find({})))
-
+    latestDate = dataframe['datetime'].max().strftime("%d/%m/%Y")
     # fill in missing dates
     dataframe = fillBlankDate(dataframe)
 
@@ -49,7 +49,7 @@ def home(request):
     graph = fig.to_html(full_html = False)
 
     #render html
-    return render(request, 'appGeneral/home.html', context = {'graph': graph})
+    return render(request, 'appGeneral/home.html', context = {'graph': graph, 'date': latestDate})
 
 @login_required
 def loggedin(request):
@@ -78,6 +78,9 @@ def logoutp(request):
         logout(request)
         return redirect('/')
     return render(request, 'appGeneral/logout.html',{})
+
+def about(request):
+    return render(request, 'appGeneral/about.html',{})
 
 def handle404(request, exception):
     return render(request, '404.html')
