@@ -6,32 +6,84 @@
     <h1>Photovoltaic Cells Nowcasting Result</h1>
     <h3>Current Dataset: {{ collection }}</h3>
     {% if graph %}
-    <div class="graph">
-        {{ graph|safe }}
-        <table class = "table">
-            <caption>Prediction Performance</caption>
-            <thead>
-                <tr>
-                    <th>Metric</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Mean Absolute Error (MAE)</td>
-                    <td>{{ mae }}</td>
-                </tr>
-                <tr>
-                    <td>Root Mean Squared Error (RMSE)</td>
-                    <td>{{ rmse }}</td>
-                </tr>
-                <tr>
-                    <td>R-squared (R2)</td>
-                    <td>{{ r2 }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    {{ graph|safe }}
+    <table class="table">
+        <caption>Prediction Performance</caption>
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Mean Absolute Error (MAE)</td>
+                <td>{{ mae }}</td>
+            </tr>
+            <tr>
+                <td>Root Mean Squared Error (RMSE)</td>
+                <td>{{ rmse }}</td>
+            </tr>
+            <tr>
+                <td>R-squared (R2)</td>
+                <td>{{ r2 }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table">
+        <caption>Deep Learning Model Metadata</caption>
+        <thead>
+            <tr>
+                <th>Property</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Model Architecture</td>
+                <td>{{ metadata.architecture }}</td>
+            </tr>
+            <tr>
+                <td>Feature Horizon</td>
+                <td>{{ metadata.featureHorizon }}</td>
+            </tr>
+            <tr>
+                <td>Nowcasting Timeframe</td>
+                <td>{{ metadata.timeframe }}</td>
+            </tr>
+            <tr>
+                <td>Loss Function</td>
+                <td>{{ metadata.lossFunction }}</td>
+            </tr>
+            <tr>
+                <td>Optimizer</td>
+                <td>{{ metadata.optimizer }}</td>
+            </tr>
+            <tr>
+                <td>Learning Rate</td>
+                <td>{{ metadata.learningRate }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table">
+        <caption>Feature List</caption>
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>Unit</th>
+                <th>Definition</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for feature in metadata.features %}
+            <tr>
+                {% for value in feature %}
+                <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     {% else %}
     <p>Sorry, no result available.</p>
     {% endif %}
