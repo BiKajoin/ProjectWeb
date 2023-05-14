@@ -40,11 +40,15 @@ def predict(request):
         for col in userCollectionNames:
             temp = col.split(':')[1]
             tempList.append(temp)
+        tempList.append("Example")
         userCollectionNames = sorted(tempList)
     
     if(request.method == 'GET'):
-        selected = request.GET.get('collection', userCollectionNames[0])
-        collection = db[f"{request.user.username}:{selected}"]
+        selected = request.GET.get('collection', 'Example')
+        if(selected != 'Example'):
+            collection = db[f"{request.user.username}:{selected}"]
+        else:
+            collection = db[selected]
 
         isAbleToPredict = False
         if(collection.count_documents({}) >= 20):
