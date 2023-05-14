@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django_tables2 import RequestConfig
+import pymongo
 from pymongo import MongoClient
 from datetime import datetime, timedelta
 
@@ -46,13 +47,15 @@ def data(request):
     startdateString = request.GET.get('startdate', '')
     enddateString = request.GET.get('enddate', '')
 
-    if (startdateString and enddateString):
+    startdate = collection.find_one(sort=[("datetime", pymongo.ASCENDING)])["datetime"]
+    enddate = collection.find_one(sort=[("datetime", pymongo.DESCENDING)])["datetime"]
 
-        startdate = datetime.strptime(startdateString, '%Y-%m-%dT%H:%M')
-        enddate = datetime.strptime(enddateString, '%Y-%m-%dT%H:%M')
+    if (startdateString and enddateString):
         
+        startdate = max(startdate, datetime.strptime(startdateString, '%Y-%m-%dT%H:%M'))
+        enddate = min(enddate, datetime.strptime(enddateString, '%Y-%m-%dT%H:%M'))
+
         filteredData = collection.find({'datetime': {'$gte': startdate, '$lt': enddate}})
-        print(filteredData)
         filteredDataList = list(filteredData)
 
         table = PVCellTable(filteredDataList)
@@ -70,8 +73,8 @@ def data(request):
         #     filtered_page_data = filtered_paginator.page(filtered_paginator.num_pages)
         context = {
             'PVCellTable': table,
-            'startdate': startdateString,
-            'enddate': enddateString,
+            'startdate': startdate,
+            'enddate': enddate,
             'collectionNames': userCollectionNames,
             'collection': selected,
             'isFiltered': 'true',
@@ -94,6 +97,8 @@ def data(request):
         context = {
             'PVCellTable': table,
             'isFiltered': 'false',
+            'startdate': startdate,
+            'enddate': enddate,
             'collectionNames': userCollectionNames,
             'collection': selected,
         }
@@ -129,12 +134,10 @@ def upload(request):
             # Check if DataFrame contains the correct fields in the correct order
             expected_fields = ['datetime', 'year', 'month', 'day', 'hour', 'minute', 'second', 'Irradiance', 'Tm', 'Vdc', 'Idc', 'kWdc', 'kWhdc','Iac', 'Vln', 'VA', 'W', 'Var', 'pf','Hz', 'VAh', 'Whac', 'cloud_cover']
             if set(df.columns) != set(expected_fields):
-                print('Incorrect fields')
                 context = {'fail_message': 'Please Check the fields in your csv file and try again.'}
                 return render(request, 'appData/fail.html', context)
             df['datetime'] = pd.to_datetime(df['datetime'])
         except:
-            print('Error uploading file')
             context = {'fail_message': 'Error occured while uploading file. Please try again.'}
             return render(request, 'appData/fail.html', context)
         
@@ -142,22 +145,18 @@ def upload(request):
         data = df.to_dict('records')
         username = request.user.username
         try:
-            print("hello2")
             collection_name = request.POST.get('name')
             if f"{username}:{collection_name}" in db.list_collection_names():
-                print('Collection name already exists')
                 context = {'fail_message': f"{collection_name} already exists. Please try again."}
                 return render(request, 'appData/fail.html', context)
             if collection_name == 'DEFAULT':
                 latest_collection = db["latestcollection"].find_one({"username": username})
                 if latest_collection is None:
-                    print("hello3.1")
                     collection_name = 1
                     while f"{username}:{collection_name}" in db.list_collection_names():
                         collection_name += 1
                     db["latestcollection"].insert_one({"username": username, "latest_collection": collection_name})
                 else:
-                    print("hello3.2")
                     collection_name = latest_collection["latest_collection"]
                     collection_name = int(collection_name)
                     collection_name += 1
@@ -171,12 +170,9 @@ def upload(request):
             collection.insert_many(data)
             context = {'collection_name': collection_name}
             return render(request, 'appData/success.html', context)
-            #return redirect('success')
         except:
-            print('Error inserting data into MongoDB')
             context = {'fail_message': 'Error occured. Please try again.'}
             return render(request, 'appData/fail.html', context)  
-            #return redirect('appData/fail.html')
     return render(request, 'appData/upload.html')
 
 @login_required
