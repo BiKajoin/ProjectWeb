@@ -65,25 +65,7 @@
             </tr>
         </tbody>
     </table>
-    <table class="table">
-        <caption>Feature List</caption>
-        <thead>
-            <tr>
-                <th>Feature</th>
-                <th>Unit</th>
-                <th>Definition</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for feature in metadata.features %}
-            <tr>
-                {% for value in feature %}
-                <td>{{ value }}</td>
-                {% endfor %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    {% include 'appModel/components/dataInfo.html' %}
     {% else %}
     <p>Sorry, no result available.</p>
     {% endif %}
