@@ -1,16 +1,30 @@
 <h4>Select Date</h4>
 <div id="dateForm">
-  <form>
+  <form onsubmit="return checkDatetime()">
       <div class="dateGroup">
           <input type="hidden" name="collection" value="{{ collection }}">
 
           <label for="startdate">Start Date: </label>
-          <input type="datetime-local" class="form-control" id="startdate" name="startdate" value="2021-11-23T08:00" value="{{ startdate }}">
+          <input type="datetime-local" class="form-control" id="startdate" name="startdate" value="2021-12-08T08:00" value="{{ startdate }}">
 
           <label for="enddate">End Date: </label>
-          <input type="datetime-local" class="form-control" id="enddate" name="enddate" value="2021-11-24T18:00" value="{{ enddate }}">
+          <input type="datetime-local" class="form-control" id="enddate" name="enddate" value="2021-12-08T18:00" value="{{ enddate }}">
 
           <button type="submit" class="btn btn-primary" id="greenbtn">Apply</button>
       </div>
   </form>
 </div>
+
+<script>
+  function checkDatetime() {
+    var startDatetime = new Date(document.getElementById("startdate").value);
+    var endDatetime = new Date(document.getElementById("enddate").value);
+
+    if (startDatetime >= endDatetime) {
+      alert('The end date must be later than the start date.');
+      return false;
+    }
+
+    return true;
+  }
+</script>

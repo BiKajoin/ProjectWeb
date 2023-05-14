@@ -44,17 +44,13 @@
     <h4>Data Page: Features</h4>
     <p><strong>Select dataset:</strong> You can select the available dataset from dropdown list and submit to view data. You can select the page you want from the pagination at the bottom</p>
     <p><strong>Filter data by date:</strong> You can also select the date range to filter the data and submit to view the result.</p>
-    <p><strong>Upload new dataset:</strong> You can upload the data by clicking "Upload" button. Then, you will be redirect to upload page to select the file. You can only submit with csv file with same field name as shown in Admin datasets. When you finished selecting the file you can name the datset name or use the default name by submitting without typing anything.</p>
+    <p><strong>Upload new dataset:</strong> You can upload the data by clicking "Upload" button. Then, you will be redirect to upload page to select the file. You can only submit with csv file with same field name as shown in Example dataset. When you finished selecting the file you can name the dataset name or use the default name by submitting without typing anything.</p>
     <p><strong>Delete dataset:</strong> You can delete the dataset by clicking "Drop Collection" button. You will be asked to confirm the action.</p>
   </div>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script>
 
-    const form = document.querySelector('form');
+    /*const form = document.querySelector('form');
     const startdate = document.querySelector('#startdate');
     const enddate = document.querySelector('#enddate');
 
@@ -63,11 +59,11 @@
         event.preventDefault();
         alert('The end date must be later than the start date.');
       }
-    });
+    });*/
 
     function confirmDrop() {
-      if (document.getElementById("collection").value == "Admin") {
-        alert("You cannot drop the Admin collection!");
+      if (document.getElementById("collection").value == "Example") {
+        alert("You cannot drop the Example collection!");
         return false;
       }
       else { 

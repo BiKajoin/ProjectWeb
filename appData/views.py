@@ -33,10 +33,10 @@ def data(request):
             tempList.append(temp)
         userCollectionNames = sorted(tempList)
     
-    userCollectionNames.append("Admin")
+    userCollectionNames.append("Example")
     # print(splited_collection_names)
-    selected = request.GET.get('collection', 'Admin')
-    if(selected != 'Admin'):
+    selected = request.GET.get('collection', 'Example')
+    if(selected != 'Example'):
         collectionName = f"{request.user.username}:{selected}"
     else:
         collectionName = selected
@@ -74,6 +74,7 @@ def data(request):
             'enddate': enddateString,
             'collectionNames': userCollectionNames,
             'collection': selected,
+            'isFiltered': 'true',
         }
     else: 
         dataList = list(collection.find())
@@ -105,8 +106,8 @@ def drop_collection(request):
         print("yippee")
         collection_name = request.POST.get('delete_data')
         target=f"{request.user.username}:{collection_name}"
-        if(collection_name=="Admin"):
-            messages.success(request, 'You cannot drop Admin collection!')
+        if(collection_name=="Example"):
+            messages.success(request, 'You cannot drop Example collection!')
             return redirect('data')
         client = MongoClient('mongodb+srv://pvcell:IXLCBUqW6U8FGUFr@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
         db = client['data']

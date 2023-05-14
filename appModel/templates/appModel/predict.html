@@ -17,6 +17,16 @@
         <button type="submit" class="btn btn-primary">Make Prediction</a>
     </form>
 
+    <button class="btn btn-primary" onclick="showHelp()" id="floating-button">Help</button>
+    <div class="popup">
+      <button id="close"></button>
+      <h2>Help</h2>
+      <h4>Predict Page: Features</h4>
+      <p><strong>Select dataset:</strong> You can select the available dataset from dropdown list and submit to view data before make a prediction. You can select the page you want from the pagination at the bottom</p>
+      <p><strong>Upload new dataset:</strong> You can upload the data by clicking "Upload" button. Then, you will be redirect to upload page to select the file. You can only submit with csv file with same field name as shown in Example dataset. When you finished selecting the file you can name the datset name or use the default name by submitting without typing anything.</p>
+      <p><strong>Make prediciton:</strong> You can also predict the power generation (W) from selected dataset by clicking "Make predicitons" at the bottom of data table.</p>
+    </div>
+
     <script>
         // select makePrediction form
         const makePredictionForm = document.querySelector('.makePrediction');
@@ -28,6 +38,22 @@
                 event.preventDefault();
                 alert('This dataset isn\'t available for prediction.\nDataset must be at least 20 rows.\nPlease select another dataset or upload new dataset.');
             }
+        });
+
+        function hideHelpOnClickOutside(event) {
+        var helpMenu = document.getElementById("helpMenu");
+        if (!helpMenu.contains(event.target)) {
+            helpMenu.style.display = "none";
+            document.removeEventListener("click", hideHelpOnClickOutside);
+        }
+        }
+
+        document.querySelector("#floating-button").addEventListener("click", function () {
+        document.querySelector(".popup").style.display = "block";
+        });
+
+        document.querySelector("#close").addEventListener("click", function () {
+        document.querySelector(".popup").style.display = "none";
         });
 
     </script>
