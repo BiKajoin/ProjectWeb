@@ -103,7 +103,6 @@ def data(request):
 
 def drop_collection(request):
     if request.method == 'POST':
-        print("yippee")
         collection_name = request.POST.get('delete_data')
         target=f"{request.user.username}:{collection_name}"
         if(collection_name=="Example"):
@@ -121,7 +120,6 @@ def drop_collection(request):
 def upload(request):
     if request.method == 'POST' and request.FILES['csv_file'] and request.POST.get('name'):
         try:
-            print("hello")
             csvFile = request.FILES['csv_file']
             fileBytes = BytesIO(csvFile.read())
             df = pd.read_csv(fileBytes)
