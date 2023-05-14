@@ -211,14 +211,6 @@ strong {
      margin: 0px auto;
 }
 
-.graph{
-     width: 70vw;
-     height: 60vh;
-     min-width: 700px;
-     min-height: 600px;
-     margin: 0 auto;
-}
-
 /* Login */
 .loginWrapper {
      background-color: whitesmoke;

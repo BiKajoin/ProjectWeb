@@ -79,6 +79,39 @@ def predict(request):
 def result(request):
     context = request.session.get('context', None)
     request.session.pop('context', None)
+
+    metadata = {
+        'architecture': 'LSTM',
+        'featureHorizon': '20 นาที',
+        'timeframe': '5 นาที',
+        'lossFunction': 'Root Mean Squared Error',
+        'optimizer': 'Adam',
+        'learningRate': '0.001',
+        'features': [
+            ['Irradiance', 'W/㎡', 'ความเข้มการแผ่รังสี'],
+            ['Tm', '℃', 'อุณหภูมิ'],
+            ['Vdc', 'V', 'แรงดันไฟฟ้า (กระแสตรง)'],
+            ['Idc', 'A', 'กระแสไฟฟ้า (กระแสตรง)'],
+            ['kWdc', 'W', 'กำลังไฟฟ้า (กระแสตรง)'],
+            ['Iac', 'A', 'กระแสไฟฟ้า (กระแสสลับ)'],
+            ['Vln', 'V', 'แรงดันไฟฟ้าขาเข้า'],
+            ['VA', 'W', 'กำลังไฟฟ้าปรากฎ'],
+            ['W', 'W', 'กำลังไฟฟ้าจริงที่ผลิตได้'],
+            ['Var', 'W', 'กำลังไฟฟ้ารีแอคทีฟ'],
+            ['pf', '-', 'Power factor'],
+            ['cloud_cover', '%', 'ปริมาณเมฆปกคลุมท้องฟ้า']
+        ]
+    }
+
+    context = {
+        'rmse': context['rmse'],
+        'mae': context['mae'],
+        'r2': context['r2'],
+        'graph': context['graph'],
+        'collection': context['collection'],
+        'metadata': metadata
+    }
+
     return render(request, 'appModel/result.html', context)
 
 # to run tensorflow serving,  follow these steps
@@ -91,7 +124,8 @@ async def makePredictionRequest(data):
     predictionResult = []
     # Create the gRPC channel and stub
     channel = grpc.aio.insecure_channel('localhost:8500')
-    stub = prediction_service_pb2_grpc.PredictionServiceStub(channel)
+
+    predictStub = prediction_service_pb2_grpc.PredictionServiceStub(channel)
 
     for batch in data:
         # Create the predict request
@@ -102,7 +136,7 @@ async def makePredictionRequest(data):
         request.inputs['input_7'].CopyFrom(tf.make_tensor_proto(batch, shape = (64, 20, 12), dtype = tf.float32))
 
         # Send the request and get the response
-        response = await stub.Predict(request)
+        response = await predictStub.Predict(request)
         batch_result = (json.loads(MessageToJson(response)))["outputs"]["dense_6"]["floatVal"]
         predictionResult.extend(batch_result)
 
@@ -225,8 +259,8 @@ async def makePrediction(request):
 
     # plot scaled real value compare to prediontion result
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x = realValue['datetime'], y = realValue['W'], name = 'Real Value', mode = 'markers+lines', marker = {'size': 3}))
-    fig.add_trace(go.Scatter(x = predictionResult['datetime'], y = predictionResult['W'], name = 'Prediction Result', mode = 'markers+lines', marker = {'size': 3}))
+    fig.add_trace(go.Scatter(x = realValue['datetime'], y = realValue['W'], name = 'Real Value'))
+    fig.add_trace(go.Scatter(x = predictionResult['datetime'], y = predictionResult['W'], name = 'Prediction Result'))
     fig.update_layout(
         autosize = True,
         margin = dict(l = 20, r = 20, b = 20, t = 20, pad = 4),
@@ -248,11 +282,11 @@ async def makePrediction(request):
     graph = fig.to_html(full_html = False)
 
     context = {
+        'graph': graph,
         'rmse': rmse,
         'mae': mae,
         'r2': r2,
-        'graph': graph,
-        'collection': selectedCollection
+        'collection': selectedCollection,
     }
     
     request.session['context'] = context
