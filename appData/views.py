@@ -19,7 +19,7 @@ from appData.models import PVCellData, PVCellTable
 # Create your views here.
 @login_required
 def data(request):
-    client = MongoClient('mongodb+srv://wannawanna:d1Dj8cOiWwUCIxQs@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
+    client = MongoClient('mongodb+srv://pvcell:IXLCBUqW6U8FGUFr@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
     db = client['data']
     userCollectionNames = request.GET.get('collectionName')
 
@@ -108,7 +108,7 @@ def drop_collection(request):
         if(collection_name=="Example"):
             messages.success(request, 'You cannot drop Example collection!')
             return redirect('data')
-        client = MongoClient('mongodb+srv://wannawanna:d1Dj8cOiWwUCIxQs@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
+        client = MongoClient('mongodb+srv://pvcell:IXLCBUqW6U8FGUFr@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
         db = client['data']
         db.drop_collection(target)
         messages.success(request, 'Collection dropped!')
@@ -124,7 +124,7 @@ def upload(request):
             fileBytes = BytesIO(csvFile.read())
             df = pd.read_csv(fileBytes)
             # Connect to the MongoDB server
-            client = MongoClient('mongodb+srv://wannawanna:d1Dj8cOiWwUCIxQs@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
+            client = MongoClient('mongodb+srv://pvcell:IXLCBUqW6U8FGUFr@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
             db = client['data']
             # Check if DataFrame contains the correct fields in the correct order
             expected_fields = ['datetime', 'year', 'month', 'day', 'hour', 'minute', 'second', 'Irradiance', 'Tm', 'Vdc', 'Idc', 'kWdc', 'kWhdc','Iac', 'Vln', 'VA', 'W', 'Var', 'pf','Hz', 'VAh', 'Whac', 'cloud_cover']

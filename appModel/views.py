@@ -30,7 +30,7 @@ def model(request):
 
 @login_required
 def predict(request):
-    client = MongoClient('mongodb+srv://wannawanna:d1Dj8cOiWwUCIxQs@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
+    client = MongoClient('mongodb+srv://pvcell:IXLCBUqW6U8FGUFr@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
     db = client['data']
     userCollectionNames = request.GET.get('collectionName')
 
@@ -87,20 +87,6 @@ def result(request):
         'lossFunction': 'Root Mean Squared Error',
         'optimizer': 'Adam',
         'learningRate': '0.001',
-        'features': [
-            ['Irradiance', 'W/㎡', 'ความเข้มการแผ่รังสี'],
-            ['Tm', '℃', 'อุณหภูมิ'],
-            ['Vdc', 'V', 'แรงดันไฟฟ้า (กระแสตรง)'],
-            ['Idc', 'A', 'กระแสไฟฟ้า (กระแสตรง)'],
-            ['kWdc', 'W', 'กำลังไฟฟ้า (กระแสตรง)'],
-            ['Iac', 'A', 'กระแสไฟฟ้า (กระแสสลับ)'],
-            ['Vln', 'V', 'แรงดันไฟฟ้าขาเข้า'],
-            ['VA', 'W', 'กำลังไฟฟ้าปรากฎ'],
-            ['W', 'W', 'กำลังไฟฟ้าจริงที่ผลิตได้'],
-            ['Var', 'W', 'กำลังไฟฟ้ารีแอคทีฟ'],
-            ['pf', '-', 'Power factor'],
-            ['cloud_cover', '%', 'ปริมาณเมฆปกคลุมท้องฟ้า']
-        ]
     }
 
     context = {
