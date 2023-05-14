@@ -132,8 +132,9 @@ def upload(request):
             client = MongoClient('mongodb+srv://pvcell:IXLCBUqW6U8FGUFr@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
             db = client['data']
             # Check if DataFrame contains the correct fields in the correct order
-            expected_fields = ['datetime', 'year', 'month', 'day', 'hour', 'minute', 'second', 'Irradiance', 'Tm', 'Vdc', 'Idc', 'kWdc', 'kWhdc','Iac', 'Vln', 'VA', 'W', 'Var', 'pf','Hz', 'VAh', 'Whac', 'cloud_cover']
-            if set(df.columns) != set(expected_fields):
+            expected_fields = ['datetime', 'Irradiance', 'Tm', 'Vdc', 'Idc', 'kWdc', 'Iac', 'Vln', 'VA', 'W', 'Var', 'pf', 'cloud_cover']
+            if not set(expected_fields).issubset(set(df.columns)):
+                print('Incorrect fields')
                 context = {'fail_message': 'Please Check the fields in your csv file and try again.'}
                 return render(request, 'appData/fail.html', context)
             df['datetime'] = pd.to_datetime(df['datetime'])
