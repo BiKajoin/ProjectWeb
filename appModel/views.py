@@ -162,15 +162,14 @@ async def testPrediction(request):
     # Retrieve data from collection
     dataframe = pd.DataFrame(list(collection.find({})))
 
-    dataframeCleaned = dataframe.drop(['_id', 'datetime', 'year', 'month', 'day', 'hour', 'minute', 'second'], axis = 1)
-    dataframeSelected = dataframeCleaned.drop(['Whac', 'VAh', 'Hz', 'kWhdc'], axis = 1)
+    dataframeCleaned = dataframe[['Irradiance', 'Tm', 'Vdc', 'Idc', 'kWdc', 'Iac', 'Vln', 'VA', 'W', 'Var', 'pf', 'cloud_cover']]
 
     # Scale data 
     scalers = dict()
     dataframeScaled = pd.DataFrame()
-    for col in dataframeSelected.columns:
+    for col in dataframeCleaned.columns:
         scaler = MinMaxScaler()
-        scaler.fit(dataframeSelected[[col]])
+        scaler.fit(dataframeCleaned[[col]])
         dataframeScaled[col] = scaler.transform(dataframe[[col]]).reshape(-1)
         scalers[col] = scaler
 
