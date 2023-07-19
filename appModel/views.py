@@ -30,7 +30,8 @@ def model(request):
 
 @login_required
 def predict(request):
-    client = MongoClient('mongodb+srv://pvcell:IXLCBUqW6U8FGUFr@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
+    # put mongodb connection here example: MongoClient('mongodb+srv://pvcell:xxx') or MongoClient('localhost:27017')
+    client = MongoClient('localhost:27017')
     db = client['data']
     userCollectionNames = request.GET.get('collectionName')
 
@@ -53,8 +54,9 @@ def predict(request):
         isAbleToPredict = False
         if(collection.count_documents({}) >= 20):
             isAbleToPredict = True
-
+        #print("hello1")
         if(request.GET.get('makePrediction') == 'True' and isAbleToPredict):
+            #print("hello2")
             return async_to_sync(makePrediction)(request)
         
         pageNumber = request.POST.get('page', 1)
@@ -110,7 +112,7 @@ async def makePredictionRequest(data):
     predictionResult = []
     # Create the gRPC channel and stub
     channel = grpc.aio.insecure_channel('localhost:8500')
-
+    #channel = grpc.aio.insecure_channel('localhost:9000')
     predictStub = prediction_service_pb2_grpc.PredictionServiceStub(channel)
 
     for batch in data:
@@ -196,10 +198,14 @@ async def makePrediction(request):
     selectedCollection = request.GET.get('collection')
 
     # Connect to MongoDB database with requested database information
-    client = MongoClient('mongodb+srv://pvcell:IXLCBUqW6U8FGUFr@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
+    # put mongodb connection here example: MongoClient('mongodb+srv://pvcell:xxx') or MongoClient('localhost:27017')
+    client = MongoClient('localhost:27017')
     database = client['data']
     username = await sync_to_async(lambda: request.user.username)()
-    collection = database[f"{username}:{selectedCollection}"]
+    if(selectedCollection != 'Example'):
+        collection = database[f"{username}:{selectedCollection}"]
+    else:
+        collection = database[f"{selectedCollection}"]
 
     # Retrieve data from collection
     dataframe = pd.DataFrame(await sync_to_async(list)(collection.find({}))).sort_values(by=['datetime'], ascending=True).reset_index(drop = True)

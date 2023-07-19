@@ -13,7 +13,8 @@ from appData.models import fillBlankDate
 def home(request):
 
     #connect to mongodb and retrieve data cursor
-    client = MongoClient('mongodb+srv://pvcell:IXLCBUqW6U8FGUFr@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
+    # put mongodb connection here example: MongoClient('mongodb+srv://pvcell:xxx') or MongoClient('localhost:27017')
+    client = MongoClient('localhost:27017')
     db = client['data']
     collection = db['homeMockup']
 

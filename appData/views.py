@@ -20,7 +20,8 @@ from appData.models import PVCellData, PVCellTable
 # Create your views here.
 @login_required
 def data(request):
-    client = MongoClient('mongodb+srv://pvcell:IXLCBUqW6U8FGUFr@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
+    # put mongodb connection here example: MongoClient('mongodb+srv://pvcell:xxx') or MongoClient('localhost:27017')
+    client = MongoClient('localhost:27017')
     db = client['data']
     userCollectionNames = request.GET.get('collectionName')
 
@@ -103,7 +104,7 @@ def data(request):
             'collection': selected,
         }
     
-    print(context)
+    #print(context)
     return render(request, 'appData/data.html', context)
 
 def drop_collection(request):
@@ -113,7 +114,8 @@ def drop_collection(request):
         if(collection_name=="Example"):
             messages.success(request, 'You cannot drop Example collection!')
             return redirect('data')
-        client = MongoClient('mongodb+srv://pvcell:IXLCBUqW6U8FGUFr@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
+        # put mongodb connection here example: MongoClient('mongodb+srv://pvcell:xxx') or MongoClient('localhost:27017')
+        client = MongoClient('localhost:27017')
         db = client['data']
         db.drop_collection(target)
         messages.success(request, 'Collection dropped!')
@@ -129,7 +131,8 @@ def upload(request):
             fileBytes = BytesIO(csvFile.read())
             df = pd.read_csv(fileBytes)
             # Connect to the MongoDB server
-            client = MongoClient('mongodb+srv://pvcell:IXLCBUqW6U8FGUFr@cluster0.htuap5h.mongodb.net/userdatabase?retryWrites=true&w=majority')
+            # put mongodb connection here example: MongoClient('mongodb+srv://pvcell:xxx') or MongoClient('localhost:27017')
+            client = MongoClient('localhost:27017')
             db = client['data']
             # Check if DataFrame contains the correct fields in the correct order
             expected_fields = ['datetime', 'Irradiance', 'Tm', 'Vdc', 'Idc', 'kWdc', 'Iac', 'Vln', 'VA', 'W', 'Var', 'pf', 'cloud_cover']
@@ -167,6 +170,7 @@ def upload(request):
                 temp = f"{username}:{collection_name}"
             else:
                 temp = f"{username}:{collection_name}"
+            #temp = "Example"
             collection = db.create_collection(temp)
             collection.insert_many(data)
             context = {'collection_name': collection_name}
